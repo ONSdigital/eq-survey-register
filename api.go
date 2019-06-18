@@ -22,10 +22,10 @@ func main() {
 	defer logger.Sync()
 
 	logger.Info("Survey Register Started",
-		zap.String("port", "8080"),
+		zap.String("port", "9090"),
 	)
 
-	log.Fatal(http.ListenAndServe(":8080", Router()))
+	log.Fatal(http.ListenAndServe(":9090", Router()))
 }
 
 // Router defines the route mapping for the API
@@ -41,8 +41,8 @@ func Router() *mux.Router {
 func SaveQuestionnaireToFile(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	type Questionnaire struct {
-		EqID        string `json:"eq_id"`
-		DataVersion string `json:"data_version"`
+		EqID      string `json:"eq_id"`
+		UpdatedAt string `json:"updatedAt"`
 	}
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -52,12 +52,12 @@ func SaveQuestionnaireToFile(w http.ResponseWriter, r *http.Request) {
 	jsonString := string(body)
 	var questionnaire Questionnaire
 	json.Unmarshal([]byte(jsonString), &questionnaire)
-	if questionnaire.EqID == "" || questionnaire.DataVersion == "" {
-		fmt.Println("No eq_id or data_version provided in json.")
+	if questionnaire.EqID == "" || questionnaire.UpdatedAt == "" {
+		fmt.Println("No eq_id or updatedAt provided in json. Or the schema was not validated.")
 		return
 	}
 
-	fileName := questionnaire.EqID + "-" + questionnaire.DataVersion + ".json"
+	fileName := questionnaire.EqID + "-v" + questionnaire.UpdatedAt + ".json"
 	f, err := os.Create("data/en/" + fileName)
 	if err != nil {
 		fmt.Println(err)
