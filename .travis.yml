@@ -1,0 +1,20 @@
+language: node
+
+node:
+  - lts/Dubnium
+
+services:
+  - docker
+
+script:
+  - set -e
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - export TAG=`if [ "$TRAVIS_PULL_REQUEST_BRANCH" == "" ]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
+  - docker build -t onsdigital/eq-survey-register:$TAG -f Dockerfile .
+  - echo "Pushing with tag [$TAG]"
+  - docker push onsdigital/eq-survey-register:$TAG
+  - echo "Hi"
+
+branches:
+  only:
+    - master
