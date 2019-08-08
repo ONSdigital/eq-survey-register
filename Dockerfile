@@ -1,8 +1,12 @@
-FROM scratch
-
-COPY data /data
-COPY eq-survey-register /
+FROM node:10-alpine
 
 EXPOSE 8080
+ENV PORT=8080
+WORKDIR /app
 
-ENTRYPOINT ["/eq-survey-register"]
+ENV NODE_ENV production
+
+ENTRYPOINT yarn start
+
+COPY . /app
+RUN yarn install
