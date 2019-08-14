@@ -4,8 +4,10 @@ let throughput = "ON_DEMAND";
 
 let surveyRegistryTableName = "survey-registry";
 
-dynamoose.local(process.env.DYNAMODB_ENDPOINT_OVERRIDE);
-throughput = { read: 10, write: 10 }; // DynamoDB local doesn't yet support on-demand
+if (process.env.DYNAMODB_ENDPOINT_OVERRIDE) {
+  dynamoose.local(process.env.DYNAMODB_ENDPOINT_OVERRIDE);
+  throughput = { read: 10, write: 10 }; // DynamoDB local doesn't yet support on-demand
+}
 
 if (process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME) {
   surveyRegistryTableName = process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME;

@@ -16,6 +16,8 @@ app.get(
 
 app.get("/retrieve/:questionnaireId", getSurveyFromRegistry);
 
+app.get("/status", (_, res) => res.sendStatus(200));
+
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, "0.0.0.0", () => {

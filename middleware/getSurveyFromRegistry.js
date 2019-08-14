@@ -12,6 +12,11 @@ module.exports = async (req, res, next) => {
         resolve(questionnaire);
       }
     );
+  }).catch(e => {
+    res.status(500).send({
+      message: "Sorry, could not retrieve the schema from the register"
+    });
+    next(e);
   });
   res.send(questionnaire);
   next();
