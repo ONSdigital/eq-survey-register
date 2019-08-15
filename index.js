@@ -3,7 +3,7 @@ const express = require("express");
 const {
   getSurveyFromRegistry,
   getSurveyFromPublisher,
-  insertIntoSurveyRegister
+  insertIntoSurveyRegistry
 } = require("./middleware");
 
 const app = express();
@@ -11,7 +11,7 @@ const app = express();
 app.get(
   "/submit/:questionnaireId",
   getSurveyFromPublisher,
-  insertIntoSurveyRegister
+  insertIntoSurveyRegistry
 );
 
 app.get("/retrieve/:questionnaireId", getSurveyFromRegistry);
