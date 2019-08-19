@@ -8,7 +8,7 @@ const {
 
 const app = express();
 
-app.get(
+app.post(
   "/submit/:questionnaireId",
   getSurveyFromPublisher,
   insertIntoSurveyRegistry
