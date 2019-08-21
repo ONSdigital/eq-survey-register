@@ -1,8 +1,13 @@
-FROM scratch
-
-COPY data /data
-COPY eq-survey-register /
+FROM node:10-alpine
 
 EXPOSE 8080
+ENV PORT=8080
+WORKDIR /app
 
-ENTRYPOINT ["/eq-survey-register"]
+ENV NODE_ENV production
+ENV AWS_DEFAULT_REGION eu-west-1
+
+ENTRYPOINT ["sh", "./docker-entrypoint.sh"]
+
+COPY . /app
+RUN yarn install

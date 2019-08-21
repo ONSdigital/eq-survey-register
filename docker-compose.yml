@@ -1,0 +1,27 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+    depends_on:
+      - dynamo
+    links:
+      - dynamo
+    volumes:
+      - .:/app
+    ports:
+      - 8080:8080
+    environment:
+      - AWS_REGION=eu-west-1
+      - AWS_ACCESS_KEY_ID=dummy
+      - AWS_SECRET_ACCESS_KEY=dummy
+      - NODE_ENV=development
+      - SURVEY_REGISTER_URL=http://host.docker.internal:8080
+      - GO_QUICK_LAUNCHER_URL=http://localhost:8000/quick-launch?url=
+      - PUBLISHER_URL=http://host.docker.internal:9000/publish/
+      - DYNAMODB_ENDPOINT_OVERRIDE=http://host.docker.internal:8090
+
+  dynamo:
+    image: amazon/dynamodb-local
+    ports:
+      - 8090:8000
