@@ -4,10 +4,10 @@ This service acts as a register of surveys published from the eq-author service.
 
 A REST API is exposed with the following endpoints
 
-| Endpoint                     | Description                                                                                  |
-| ---------------------------- | -------------------------------------------------------------------------------------------- |
-| `/submit/:questionnaireId`   | Publishes the Author survey with the given questionnaire Id and stores it into the registry. |
-| `/retrieve/:questionnaireId` | Returns the Schema content for the specified questionnaire Id                                |
+| Endpoint                                       | Description                                                                                  |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `/submit/:questionnaireId/:surveyId/:formType` | Publishes the Author survey with the given questionnaire Id and stores it into the registry. |
+| `/retrieve/:questionnaireId`                   | Returns the Schema content for the specified questionnaire Id                                |
 
 ---
 
