@@ -15,54 +15,34 @@ if (process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME) {
 
 const surveyRegistrySchema = new dynamoose.Schema(
   {
-    eq_id: {
+    id: {
       type: String,
       hashKey: true,
       required: true
     },
-    form_type: {
+    eq_id: {
       type: String,
       required: true
     },
-    mime_type: {
-      type: String,
-      required: true
-    },
-    schema_version: {
-      type: String,
-      required: true
-    },
-    data_version: {
-      type: String,
+    survey_version: {
+      type: Number,
       required: true
     },
     survey_id: {
       type: String,
       required: true
     },
-    title: {
+    form_type: {
       type: String,
       required: true
     },
-    theme: {
+    date_published: {
       type: String,
       required: true
     },
-    sections: {
-      type: Array,
-      required: true
-    },
-    metadata: {
-      type: Array,
-      required: true
-    },
-    navigation: {
+    survey: {
       type: Object,
-      required: true
-    },
-    view_submitted_response: {
-      type: Object,
-      required: true
+      require: true
     }
   },
   {
