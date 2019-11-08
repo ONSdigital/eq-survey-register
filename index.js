@@ -9,7 +9,7 @@ const {
 const app = express();
 
 app.put(
-  "/submit/:questionnaireId/:surveyId/:formType",
+  "/submit/:questionnaireId/:surveyId/:formType/:surveyVersion",
   getSurveyFromPublisher,
   insertIntoSurveyRegistry
 );
