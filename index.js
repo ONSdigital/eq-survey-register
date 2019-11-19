@@ -9,7 +9,8 @@ const {
 const app = express();
 
 app.put(
-  "/submit/:questionnaireId/:surveyId/:formType/:surveyVersion",
+  "/submit",
+  express.json(),
   getSurveyFromPublisher,
   insertIntoSurveyRegistry
 );
