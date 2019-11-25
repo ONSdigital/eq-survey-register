@@ -15,17 +15,17 @@ if (process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME) {
 
 const surveyRegistrySchema = new dynamoose.Schema(
   {
-    id: {
+    registry_id: {
       type: String,
       hashKey: true,
       required: true
     },
-    eq_id: {
+    author_id: {
       type: String,
       required: true
     },
-    survey_version: {
-      type: Number,
+    eq_id: {
+      type: String,
       required: true
     },
     survey_id: {
@@ -36,23 +36,47 @@ const surveyRegistrySchema = new dynamoose.Schema(
       type: String,
       required: true
     },
-    date_published: {
+    survey_version: {
       type: String,
       required: true
     },
-    survey: {
+    runner_version: {
+      type: String,
+      required: true
+    },
+    sort_key: {
+      type: String,
+      required: true,
+      index: {
+        global: true,
+        name: "sortKey"
+      }
+    },
+    language: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    schema: {
       type: Object,
       require: true
     }
   },
   {
-    throughput: throughput
+    throughput: throughput,
+    timestamps: true
   }
 );
 
-const SurveyRegistryModel = dynamoose.model(
+const QuestionnaireModel = dynamoose.model(
   surveyRegistryTableName,
   surveyRegistrySchema
 );
 
-module.exports = SurveyRegistryModel;
+module.exports = {
+  QuestionnaireModel,
+  dynamoose
+};
