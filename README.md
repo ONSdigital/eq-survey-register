@@ -2,15 +2,6 @@
 
 This service acts as a register of surveys published from the eq-author service.
 
-A REST API is exposed with the following endpoints
-
-| Endpoint                                       | Description                                                                                   |
-| ---------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `/submit/:questionnaireId/:surveyId/:formType` | Publishes the Author survey with the given questionnaire Id and stores it into the registry.  |
-| `/surveys`                                     | Accepts `eq_id` and `version` as query parameters, required for returning the registry entry. |
-
----
-
 ## Build and Run
 
 Dependencies in this project are managed by yarn. To install all required packages run:
@@ -23,7 +14,25 @@ In order to run this service locally the docker compose file contains all the ne
 
 ## API Reference
 
-This API exposes the following endpoints:
+### Submit
+
+Publishes the Author survey with the given questionnaire Id and stores it into the registry.
+
+- **URL**
+
+  `/submit/:questionnaireId/:surveyId/:formType`
+
+- **Method:**
+
+  `GET`
+
+- **URL Params**
+
+  None
+
+- **Success Response:**
+
+  **Code:** 200
 
 ### AllSurveys
 
