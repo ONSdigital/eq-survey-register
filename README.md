@@ -1,4 +1,4 @@
-### eq-survey-register
+# eq-survey-register
 
 This service acts as a register of surveys published from the eq-author service.
 
@@ -11,7 +11,7 @@ A REST API is exposed with the following endpoints
 
 ---
 
-#### Build and Run
+## Build and Run
 
 Dependencies in this project are managed by yarn. To install all required packages run:
 
@@ -21,14 +21,14 @@ In order to run this service locally the docker compose file contains all the ne
 
 `docker-compose up` (passing in the --build flag if first time setup)
 
-### API Reference
+## API Reference
 
 This API exposes the following endpoints:
 
 - Submit
 - Surveys
 
-#### Survey
+### Survey
 
 Gets information about the surveys that are stored within the registry.
 
