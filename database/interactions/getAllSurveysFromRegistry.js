@@ -1,4 +1,4 @@
-const SurveyRegistryModel = require("../database");
+const SurveyRegistryModel = require("..");
 
 module.exports = async (req, res, next) => {
   SurveyRegistryModel.scan().exec((err, surveys) => {

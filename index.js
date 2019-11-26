@@ -1,11 +1,11 @@
 const express = require("express");
 
 const {
-  getSurveyFromRegistry,
   getSurveyFromPublisher,
-  getAllSurveysFromRegistry,
   insertIntoSurveyRegistry
-} = require("./middleware");
+} = require("./database/interactions");
+
+const { surveyRouter } = require("./middleware");
 
 const app = express();
 
@@ -15,9 +15,7 @@ app.put(
   getSurveyFromPublisher,
   insertIntoSurveyRegistry
 );
-
-app.get("/get/:questionnaireId", getSurveyFromRegistry);
-app.get("/questionnaires", getAllSurveysFromRegistry);
+app.get("/surveys", surveyRouter);
 
 app.get("/status", (_, res) => res.sendStatus(200));
 
