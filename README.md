@@ -39,7 +39,7 @@ Gets information about the surveys that are stored within the registry.
 
 - **URL Params**
 
-None
+  None
 
 - **Success Response:**
 
