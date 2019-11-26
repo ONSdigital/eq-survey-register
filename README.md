@@ -80,6 +80,7 @@ Gets the registry entry for a single questionnaire
 - **URL Params**
 
   **Required** `eq_id=STRING`
+  
   **Required** `version=INTEGER`
 
 - **Success Response:**
