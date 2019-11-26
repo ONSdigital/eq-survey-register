@@ -25,16 +25,13 @@ In order to run this service locally the docker compose file contains all the ne
 
 This API exposes the following endpoints:
 
-- Submit
-- Surveys
-
-### Survey
+### AllSurveys
 
 Gets information about the surveys that are stored within the registry.
 
 - **URL**
 
-  `/surveys`
+  `/allsurveys`
 
 - **Method:**
 
@@ -66,4 +63,39 @@ Gets information about the surveys that are stored within the registry.
         versions: 4
       }
     ]
+    ```
+
+### Survey
+
+Gets information about the surveys that are stored within the registry.
+
+- **URL**
+
+  `/survey`
+
+- **Method:**
+
+  `GET`
+
+- **URL Params**
+
+* **Required** `eq_id=STRING`
+* **Required** `version=INTEGER`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```
+    {
+      survey_id: "123",
+      survey_version: 11,
+      date_published: ""1574776786750",
+      survey: {
+        . . . AUTHOR JSON . . .
+      },
+      eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
+      id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
+      form_type: "123"
+    }
     ```
