@@ -67,7 +67,7 @@ Gets information about the surveys that are stored within the registry.
 
 ### Survey
 
-Gets information about the surveys that are stored within the registry.
+Gets the registry entry for a single questionnaire
 
 - **URL**
 
@@ -79,8 +79,8 @@ Gets information about the surveys that are stored within the registry.
 
 - **URL Params**
 
-* **Required** `eq_id=STRING`
-* **Required** `version=INTEGER`
+-- **Required** `eq_id=STRING`
+-- **Required** `version=INTEGER`
 
 - **Success Response:**
 
