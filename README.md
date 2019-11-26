@@ -28,7 +28,7 @@ This API exposes the following endpoints:
 - Submit
 - Surveys
 
-## **Survey**
+#### Survey
 
 Gets information about the surveys that are stored within the registry.
 
