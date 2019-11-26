@@ -39,31 +39,32 @@ Gets information about the surveys that are stored within the registry.
 
 - **URL Params**
 
-* None
+None
 
 - **Success Response:**
 
-  - **Code:** 200 <br />
-    **Content:**
-    ```
-    [ { title: "Google Pixel 4",
-        date_published: "1574776786750",
-        register_id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
-        eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
-        survey_id: "123",
-        form_type: "123",
-        versions: 11
-      },
-      { title: "iPhone 11",
-        date_published: "1574776884072",
-        register_id: "249feb68-8d56-44d9-ac91-1a36137adcd0",
-        eq_id: "e7602122-6d6d-4678-80df-c6ffa544179f",
-        survey_id: "123",
-        form_type: "123",
-        versions: 4
-      }
-    ]
-    ```
+  **Code:** 200 <br />
+  **Content:**
+
+  ```
+  [ { title: "Google Pixel 4",
+      date_published: "1574776786750",
+      register_id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
+      eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
+      survey_id: "123",
+      form_type: "123",
+      versions: 11
+    },
+    { title: "iPhone 11",
+      date_published: "1574776884072",
+      register_id: "249feb68-8d56-44d9-ac91-1a36137adcd0",
+      eq_id: "e7602122-6d6d-4678-80df-c6ffa544179f",
+      survey_id: "123",
+      form_type: "123",
+      versions: 4
+    }
+  ]
+  ```
 
 ### Survey
 
@@ -79,24 +80,24 @@ Gets the registry entry for a single questionnaire
 
 - **URL Params**
 
-  **Required** `eq_id=STRING`
-  
+  **Required** `eq_id=STRING` <br/>
   **Required** `version=INTEGER`
 
 - **Success Response:**
 
-  - **Code:** 200 <br />
-    **Content:**
-    ```
-    {
-      survey_id: "123",
-      survey_version: 11,
-      date_published: ""1574776786750",
-      survey: {
-        . . . AUTHOR JSON . . .
-      },
-      eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
-      id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
-      form_type: "123"
-    }
-    ```
+  **Code:** 200 <br />
+  **Content:**
+
+  ```
+  {
+    survey_id: "123",
+    survey_version: 11,
+    date_published: ""1574776786750",
+    survey: {
+      . . . AUTHOR JSON . . .
+    },
+    eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
+    id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
+    form_type: "123"
+  }
+  ```
