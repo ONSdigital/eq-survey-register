@@ -1,9 +1,14 @@
-const SurveyRegistryModel = require("..");
+const SurveyRegistryModel = require("../database/model");
 
 module.exports = async (req, res, next) => {
   SurveyRegistryModel.scan().exec((err, surveys) => {
     if (err) {
-      res.status(500).send(err);
+      res
+        .status(500)
+        .send(
+          "Sorry, something went wrong whilst retrieving the questionnaires."
+        )
+        .next(e);
     }
 
     let pseudoRes = {};

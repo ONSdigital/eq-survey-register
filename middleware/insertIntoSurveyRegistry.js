@@ -1,5 +1,5 @@
 const uuid = require("uuid");
-const SurveyRegistryModel = require("..");
+const SurveyRegistryModel = require("../database/model");
 
 const { GO_QUICK_LAUNCHER_URL, SURVEY_REGISTER_URL } = process.env;
 

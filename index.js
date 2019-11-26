@@ -2,10 +2,10 @@ const express = require("express");
 
 const {
   getSurveyFromPublisher,
-  insertIntoSurveyRegistry
-} = require("./database/interactions");
-
-const { surveyRouter } = require("./middleware");
+  insertIntoSurveyRegistry,
+  getAllSurveysFromRegistry,
+  getSurveyFromRegistry
+} = require("./middleware");
 
 const app = express();
 
@@ -15,8 +15,9 @@ app.put(
   getSurveyFromPublisher,
   insertIntoSurveyRegistry
 );
-app.get("/surveys", surveyRouter);
 
+app.get("/allsurveys", getAllSurveysFromRegistry);
+app.get("/survey", getSurveyFromRegistry);
 app.get("/status", (_, res) => res.sendStatus(200));
 
 const PORT = process.env.PORT || 8080;
