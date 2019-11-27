@@ -34,9 +34,9 @@ Publishes the Author survey with the given questionnaire Id and stores it into t
 
   **Code:** 200
 
-### AllSurveys
+### Surveys
 
-Gets information about the surveys that are stored within the registry.
+Gets information about all surveys that are stored within the registry.
 
 - **URL**
 
@@ -75,7 +75,7 @@ Gets information about the surveys that are stored within the registry.
   ]
   ```
 
-### Get version of a survey
+### Version of a survey
 
 Gets the registry entry for a given questionnaire at a given version.
 
