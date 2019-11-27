@@ -40,7 +40,7 @@ Gets information about all surveys that are stored within the registry.
 
 - **URL**
 
-  `/allsurveys`
+  `/surveys`
 
 - **Method:**
 
@@ -73,6 +73,41 @@ Gets information about all surveys that are stored within the registry.
       versions: 4
     }
   ]
+  ```
+
+### Latest version of a survey
+
+Gets the latest version of a survey
+
+- **URL**
+
+  `/surveys/:eqId`
+
+- **Method:**
+
+  `GET`
+
+- **URL Params**
+
+  `eqId` --> The id of a survey from Author; the EQ id
+
+- **Success Response:**
+
+  **Code:** 200 <br />
+  **Content:**
+
+  ```
+  {
+    survey_id: "123",
+    survey_version: 11,
+    date_published: ""1574776786750",
+    survey: {
+      . . . AUTHOR JSON . . .
+    },
+    eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
+    id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
+    form_type: "123"
+  }
   ```
 
 ### Version of a survey

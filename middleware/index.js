@@ -1,11 +1,13 @@
-const getVersionOfSurveyFromRegistry = require("./getVersionOfSurveyFromRegistry");
+const getVersionOfSurvey = require("./getVersionOfSurvey");
 const getSurveyFromPublisher = require("./getSurveyFromPublisher");
 const insertIntoSurveyRegistry = require("./insertIntoSurveyRegistry");
-const getAllSurveysFromRegistry = require("./getAllSurveysFromRegistry");
+const getAllSurveys = require("./getAllSurveys");
+const getLatestVersionOfSurvey = require("./getLatestVersionOfSurvey");
 
 module.exports = {
-  getVersionOfSurveyFromRegistry,
+  getVersionOfSurvey,
   getSurveyFromPublisher,
-  getAllSurveysFromRegistry,
-  insertIntoSurveyRegistry
+  getAllSurveys,
+  insertIntoSurveyRegistry,
+  getLatestVersionOfSurvey
 };

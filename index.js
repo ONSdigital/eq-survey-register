@@ -3,8 +3,9 @@ const express = require("express");
 const {
   getSurveyFromPublisher,
   insertIntoSurveyRegistry,
-  getAllSurveysFromRegistry,
-  getVersionOfSurveyFromRegistry
+  getAllSurveys,
+  getVersionOfSurvey,
+  getLatestVersionOfSurvey
 } = require("./middleware");
 
 const app = express();
@@ -16,8 +17,9 @@ app.put(
   insertIntoSurveyRegistry
 );
 
-app.get("/surveys", getAllSurveysFromRegistry);
-app.get("/surveys/:eqId/versions/:version", getVersionOfSurveyFromRegistry);
+app.get("/surveys", getAllSurveys);
+app.get("/surveys/:eqId", getLatestVersionOfSurvey);
+app.get("/surveys/:eqId/versions/:version", getVersionOfSurvey);
 app.get("/status", (_, res) => res.sendStatus(200));
 
 const PORT = process.env.PORT || 8080;
