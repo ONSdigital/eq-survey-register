@@ -89,8 +89,8 @@ Gets the registry entry for a given questionnaire at a given version.
 
 - **URL Params**
 
-  **Required** `eqId` -> The id of a survey from Author; the EQ id <br/>
-  **Required** `version` -> The desired version of the survey to return
+  `eqId` --> The id of a survey from Author; the EQ id <br/>
+  `version` --> The desired version of the survey to return
 
 - **Success Response:**
 
