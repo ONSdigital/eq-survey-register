@@ -1,8 +1,8 @@
 const SurveyRegistryModel = require("../database/model");
 
 module.exports = async (req, res, next) => {
-  const eq_id = req.query.eq_id;
-  const version = req.query.version;
+  const eq_id = req.params.eqId;
+  const version = req.params.version;
 
   SurveyRegistryModel.scan(
     {

@@ -75,13 +75,13 @@ Gets information about the surveys that are stored within the registry.
   ]
   ```
 
-### Survey
+### Get version of a survey
 
-Gets the registry entry for a single questionnaire
+Gets the registry entry for a given questionnaire at a given version.
 
 - **URL**
 
-  `/survey`
+  `/surveys/:eqId/versions/:version`
 
 - **Method:**
 
@@ -89,8 +89,8 @@ Gets the registry entry for a single questionnaire
 
 - **URL Params**
 
-  **Required** `eq_id=STRING` <br/>
-  **Required** `version=INTEGER`
+  **Required** `eqId` -> The id of a survey from Author; the EQ id <br/>
+  **Required** `version` -> The desired version of the survey to return
 
 - **Success Response:**
 

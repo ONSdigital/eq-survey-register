@@ -4,7 +4,7 @@ const {
   getSurveyFromPublisher,
   insertIntoSurveyRegistry,
   getAllSurveysFromRegistry,
-  getSurveyFromRegistry
+  getVersionOfSurveyFromRegistry
 } = require("./middleware");
 
 const app = express();
@@ -16,8 +16,8 @@ app.put(
   insertIntoSurveyRegistry
 );
 
-app.get("/allsurveys", getAllSurveysFromRegistry);
-app.get("/survey", getSurveyFromRegistry);
+app.get("/surveys", getAllSurveysFromRegistry);
+app.get("/surveys/:eqId/versions/:version", getVersionOfSurveyFromRegistry);
 app.get("/status", (_, res) => res.sendStatus(200));
 
 const PORT = process.env.PORT || 8080;
