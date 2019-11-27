@@ -20,7 +20,7 @@ Publishes the Author survey with the given questionnaire Id and stores it into t
 
 - **URL**
 
-  `/submit/:questionnaireId/:surveyId/:formType`
+  `/submit`
 
 - **Method:**
 
