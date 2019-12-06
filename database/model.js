@@ -15,17 +15,17 @@ if (process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME) {
 
 const surveyRegistrySchema = new dynamoose.Schema(
   {
-    id: {
+    registry_id: {
       type: String,
       hashKey: true,
       required: true
     },
-    eq_id: {
+    author_id: {
       type: String,
       required: true
     },
-    survey_version: {
-      type: Number,
+    eq_id: {
+      type: String,
       required: true
     },
     survey_id: {
@@ -36,11 +36,35 @@ const surveyRegistrySchema = new dynamoose.Schema(
       type: String,
       required: true
     },
-    date_published: {
+    survey_version: {
+      type: Number,
+      required: true
+    },
+    runner_version: {
+      type: Number,
+      required: true
+    },
+    publish_date: {
       type: String,
       required: true
     },
-    survey: {
+    sort_key: {
+      type: String,
+      required: true
+    },
+    language: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    schema: {
       type: Object,
       require: true
     }
