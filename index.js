@@ -17,9 +17,9 @@ app.put(
   insertIntoSurveyRegistry
 );
 
-app.get("/surveys", getAllSurveys);
-app.get("/surveys/:eqId", getLatestVersionOfSurvey);
-app.get("/surveys/:eqId/versions/:version", getVersionOfSurvey);
+app.get("/survey", express.json(), getLatestVersionOfSurvey);
+app.get("/survey/version", express.json(), getVersionOfSurvey);
+
 app.get("/status", (_, res) => res.sendStatus(200));
 
 const PORT = process.env.PORT || 8080;

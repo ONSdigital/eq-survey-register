@@ -1,10 +1,12 @@
-const SurveyRegistryModel = require("../database/model");
+const QuestionnaireModel = require("../database/model");
 
 module.exports = async (req, res, next) => {
-  const eq_id = req.params.eqId;
+  const { survey_id, form_type } = req.body;
 
-  SurveyRegistryModel.scan({
-    eq_id: eq_id
+  const sort_key = `v2_${survey_id}_${form_type}_en`;
+
+  QuestionnaireModel.query({
+    sort_key: sort_key
   }).exec((err, surveys) => {
     if (err) {
       res

@@ -37,20 +37,20 @@ const surveyRegistrySchema = new dynamoose.Schema(
       required: true
     },
     survey_version: {
-      type: Number,
+      type: String,
       required: true
     },
     runner_version: {
-      type: Number,
-      required: true
-    },
-    publish_date: {
       type: String,
       required: true
     },
     sort_key: {
       type: String,
-      required: true
+      required: true,
+      index: {
+        global: true,
+        name: "sortKey"
+      }
     },
     language: {
       type: String,
@@ -60,23 +60,20 @@ const surveyRegistrySchema = new dynamoose.Schema(
       type: String,
       required: true
     },
-    description: {
-      type: String,
-      required: true
-    },
     schema: {
       type: Object,
       require: true
     }
   },
   {
-    throughput: throughput
+    throughput: throughput,
+    timestamps: true
   }
 );
 
-const SurveyRegistryModel = dynamoose.model(
+const QuestionnaireModel = dynamoose.model(
   surveyRegistryTableName,
   surveyRegistrySchema
 );
 
-module.exports = SurveyRegistryModel;
+module.exports = QuestionnaireModel;

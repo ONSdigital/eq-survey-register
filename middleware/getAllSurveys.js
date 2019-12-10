@@ -1,7 +1,7 @@
-const SurveyRegistryModel = require("../database/model");
+const QuestionnaireModel = require("../database/model");
 
 module.exports = async (req, res, next) => {
-  SurveyRegistryModel.scan().exec((err, surveys) => {
+  QuestionnaireModel.scan().exec((err, surveys) => {
     if (err) {
       res
         .status(500)
