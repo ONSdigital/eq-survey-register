@@ -3,9 +3,9 @@ const express = require("express");
 const {
   getSurveyFromPublisher,
   insertIntoSurveyRegistry,
-  getAllSurveys,
-  getVersionOfSurvey,
-  getLatestVersionOfSurvey
+  getVersionOfQuestionnaire,
+  getLatestVersionOfQuestionnaire,
+  getPublishedQuestionnaires
 } = require("./middleware");
 
 const app = express();
@@ -17,8 +17,13 @@ app.put(
   insertIntoSurveyRegistry
 );
 
-app.get("/survey", express.json(), getLatestVersionOfSurvey);
-app.get("/survey/version", express.json(), getVersionOfSurvey);
+app.get(
+  "/published-questionnaires",
+  express.json(),
+  getPublishedQuestionnaires
+);
+app.get("/questionnaire", express.json(), getLatestVersionOfQuestionnaire);
+app.get("/questionnaire/version", express.json(), getVersionOfQuestionnaire);
 
 app.get("/status", (_, res) => res.sendStatus(200));
 

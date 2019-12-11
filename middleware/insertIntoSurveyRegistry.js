@@ -91,7 +91,9 @@ module.exports = async (req, res, next) => {
         latestQuestionnaireValues
       )
         .then(() => {
-          console.log(`Survey ${res.questionnaire.eq_id} has been updated`);
+          console.log(
+            `Latest version of ${res.questionnaire.eq_id} has been updated`
+          );
         })
         .catch(e => {
           res.status(500).send({
@@ -103,9 +105,7 @@ module.exports = async (req, res, next) => {
     } else {
       saveModel(new QuestionnaireModel(latestQuestionnaireValues))
         .then(() => {
-          console.log(
-            `Latest version of ${res.questionnaire.eq_id} has been saved`
-          );
+          console.log(`Latest version of ${eq_id} has been saved`);
         })
         .catch(e => {
           res.status(500).send({
@@ -118,7 +118,7 @@ module.exports = async (req, res, next) => {
 
     saveModel(new QuestionnaireModel(newQuestionnaireVersionValues))
       .then(() => {
-        console.log(`Survey ${res.questionnaire.eq_id} has been saved`);
+        console.log(`Version ${surveyVersion} of ${eq_id} has been saved`);
       })
       .catch(e => {
         res.status(500).send({
