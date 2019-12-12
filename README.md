@@ -34,13 +34,13 @@ Publishes the Author survey with the given questionnaire Id and stores it into t
 
   **Code:** 200
 
-### Surveys
+### Get a list of published questionnaires
 
-Gets information about all surveys that are stored within the registry.
+Returns abstracted information about the latest version of published questionnaires within the registry. 
 
 - **URL**
 
-  `/surveys`
+  `/published-questionnaires`
 
 - **Method:**
 
@@ -49,39 +49,56 @@ Gets information about all surveys that are stored within the registry.
 - **URL Params**
 
   None
+  
+- **Query Params**
+
+  None
+  
+- **Body Params**
+
+  None
 
 - **Success Response:**
 
-  **Code:** 200 <br />
+  **Code:** 200 <br/>
   **Content:**
+  
+    ```
+      [
+        {
+            "registry_id": "b02f1331-57f3-4427-8182-c969dbed6414",
+            "survey_id": "187",
+            "form_type": "002",
+            "title": "Ecommerce",
+            "lastPublished": "2019-12-12T08:55:27.731Z",
+            "survey_version": "1"
+        },
+        {
+            "registry_id": "8ab3974e-16c3-41ab-ac94-6f1d096fbf63",
+            "survey_id": "187",
+            "form_type": "0001",
+            "title": "Ecommerce",
+            "lastPublished": "2019-12-12T08:55:27.722Z",
+            "survey_version": "1"
+        }
+    ]
+    ```
 
-  ```
-  [ { title: "Google Pixel 4",
-      date_published: "1574776786750",
-      register_id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
-      eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
-      survey_id: "123",
-      form_type: "123",
-      versions: 11
-    },
-    { title: "iPhone 11",
-      date_published: "1574776884072",
-      register_id: "249feb68-8d56-44d9-ac91-1a36137adcd0",
-      eq_id: "e7602122-6d6d-4678-80df-c6ffa544179f",
-      survey_id: "123",
-      form_type: "123",
-      versions: 4
-    }
-  ]
-  ```
+- **Fail Response:**
+  
+  **Code:** 404 <br/>
+  **Content:**
+    ```
+      Sorry, there are no published questionnaires
+    ```
 
-### Latest version of a survey
+### Get the latest version of a questionnaire
 
 Gets the latest version of a survey
 
 - **URL**
 
-  `/surveys/:eqId`
+  `/questionnaire`
 
 - **Method:**
 
@@ -89,34 +106,41 @@ Gets the latest version of a survey
 
 - **URL Params**
 
-  `eqId` --> The id of a survey from Author; the EQ id
+  None
+  
+- **Query Params**
+
+  None
+  
+- **Body Params**
+
+  ```
+  {
+    "survey_id": <STRING>,
+    "form_type": <STRING>
+  }
+  ```
 
 - **Success Response:**
 
   **Code:** 200 <br />
+  **Content:** Runner JSON; examples: https://github.com/ONSdigital/eq-survey-runner/tree/master/data/en
+  
+- **Fail Response:**
+  
+  **Code:** 404 <br/>
   **Content:**
-
-  ```
-  {
-    survey_id: "123",
-    survey_version: 11,
-    date_published: ""1574776786750",
-    survey: {
-      . . . AUTHOR JSON . . .
-    },
-    eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
-    id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
-    form_type: "123"
-  }
-  ```
-
-### Version of a survey
+    ```
+      Sorry, that questionnaire does not exist or is unavailable.
+    ```
+  
+### Get a version of a questionnaire
 
 Gets the registry entry for a given questionnaire at a given version.
 
 - **URL**
 
-  `/surveys/:eqId/versions/:version`
+  `/questionnaire/version`
 
 - **Method:**
 
@@ -124,24 +148,31 @@ Gets the registry entry for a given questionnaire at a given version.
 
 - **URL Params**
 
-  `eqId` --> The id of a survey from Author; the EQ id <br/>
-  `version` --> The desired version of the survey to return
+  None
+  
+- **Query Params**
+
+  None
+  
+- **Body Params**
+
+  ```
+  {
+    "survey_id": <STRING>,
+    "form_type": <STRING>,
+    "survey_version": <STRING>
+  }
+  ```
 
 - **Success Response:**
 
   **Code:** 200 <br />
+  **Content:** Runner JSON; examples: https://github.com/ONSdigital/eq-survey-runner/tree/master/data/en
+  
+- **Fail Response:**
+  
+  **Code:** 404 <br/>
   **Content:**
-
-  ```
-  {
-    survey_id: "123",
-    survey_version: 11,
-    date_published: ""1574776786750",
-    survey: {
-      . . . AUTHOR JSON . . .
-    },
-    eq_id: "f5489168-f6fa-4c9e-8404-99d0a0e3d805",
-    id: "b391dacf-cff6-4f57-9ca1-917ad4fd0a33",
-    form_type: "123"
-  }
-  ```
+    ```
+      Sorry, that questionnaire does not exist or is unavailable.
+    ```
