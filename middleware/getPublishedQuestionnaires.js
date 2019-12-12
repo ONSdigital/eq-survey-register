@@ -16,6 +16,7 @@ module.exports = async (req, res, next) => {
 
       const publishedQuestionnaires = questionnaires.map(questionnaire => ({
         registry_id: questionnaire.registry_id,
+        eq_id: questionnaire.eq_id,
         survey_id: questionnaire.survey_id,
         form_type: questionnaire.form_type,
         title: questionnaire.title,
