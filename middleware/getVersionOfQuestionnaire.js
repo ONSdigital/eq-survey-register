@@ -1,7 +1,7 @@
 const QuestionnaireModel = require("../database/model");
 
 module.exports = async (req, res, next) => {
-  const { survey_version, survey_id, form_type } = req.body;
+  const { survey_version, survey_id, form_type } = req.params;
 
   const sort_key = `v${survey_version}_${survey_id}_${form_type}_en`;
 
@@ -9,18 +9,19 @@ module.exports = async (req, res, next) => {
     sort_key: sort_key
   }).exec((err, survey) => {
     if (err) {
-      res
+      return res
         .status(500)
-        .send("Sorry, something went wrong whilst retrieving the questionnaire")
-        .next(err);
+        .send(
+          "Sorry, something went wrong whilst retrieving the questionnaire"
+        );
     }
 
     if (!survey) {
-      res
+      return res
         .status(404)
         .send("Sorry, that questionnaire does not exist or is unavailable.");
     }
 
-    res.status(200).send(survey.schema);
+    return res.status(200).send(survey.schema);
   });
 };

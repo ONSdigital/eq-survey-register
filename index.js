@@ -23,7 +23,10 @@ app.get(
   getPublishedQuestionnaires
 );
 app.get("/questionnaire", express.json(), getLatestVersionOfQuestionnaire);
-app.get("/questionnaire/version", express.json(), getVersionOfQuestionnaire);
+app.get(
+  "/questionnaire/:survey_id/:form_type/:survey_version",
+  getVersionOfQuestionnaire
+);
 
 app.get("/status", (_, res) => res.sendStatus(200));
 
