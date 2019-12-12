@@ -21,6 +21,6 @@ module.exports = async (req, res, next) => {
         .send("Sorry, that questionnaire does not exist or is unavailable.");
     }
 
-    res.status(200).send(survey);
+    res.status(200).send(survey.schema);
   });
 };
