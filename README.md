@@ -134,18 +134,17 @@ Gets the latest version of a survey
       Sorry, that questionnaire does not exist or is unavailable.
     ```
   
-### Version of a survey
+### Get a version of a questionnaire
 
 Gets the registry entry for a given questionnaire at a given version.
 
 - **URL**
 
-  `/surveys/:eqId/versions/:version`
+  `/questionnaire/version`
 
 - **Method:**
 
   `GET`
-
 
 - **URL Params**
 
