@@ -1,4 +1,4 @@
-const QuestionnaireModel = require("../database/model");
+const { QuestionnaireModel } = require("../database");
 
 module.exports = async (req, res, next) => {
   QuestionnaireModel.scan("sort_key")

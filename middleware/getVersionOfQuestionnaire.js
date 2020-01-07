@@ -1,4 +1,4 @@
-const QuestionnaireModel = require("../database/model");
+const { QuestionnaireModel } = require("../database");
 
 module.exports = async (req, res, next) => {
   const { survey_version, survey_id, form_type } = req.params;

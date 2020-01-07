@@ -1,5 +1,5 @@
 const uuid = require("uuid");
-const QuestionnaireModel = require("../database/model");
+const { QuestionnaireModel } = require("../database");
 
 const { GO_QUICK_LAUNCHER_URL, SURVEY_REGISTER_URL } = process.env;
 
@@ -78,9 +78,13 @@ module.exports = async (req, res, next) => {
       ...globalQuestionnaireValues
     };
 
+    console.log("before");
+
     const latestQuestionnaire = await getModel(QuestionnaireModel, {
       sort_key: latestQuestionnaireSortKey
     });
+
+    console.log("after");
 
     if (latestQuestionnaire) {
       updateModel(

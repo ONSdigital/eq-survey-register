@@ -76,4 +76,7 @@ const QuestionnaireModel = dynamoose.model(
   surveyRegistrySchema
 );
 
-module.exports = QuestionnaireModel;
+module.exports = {
+  QuestionnaireModel,
+  dynamoose
+};

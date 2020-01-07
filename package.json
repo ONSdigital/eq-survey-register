@@ -9,7 +9,8 @@
   "scripts": {
     "start": "nodemon",
     "start_service": "node index.js",
-    "dynamodb-admin": "AWS_REGION=eu-west-1 AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy DYNAMO_ENDPOINT=http://localhost:8090 dynamodb-admin"
+    "dynamodb-admin": "AWS_REGION=eu-west-1 AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy DYNAMO_ENDPOINT=http://localhost:8090 dynamodb-admin",
+    "test": "jest"
   },
   "dependencies": {
     "dynamoose": "^1.10.0",
@@ -20,6 +21,14 @@
   },
   "devDependencies": {
     "dynamodb-admin": "^3.2.0",
-    "nodemon": "^1.19.1"
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.1",
+    "sinon": "^8.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }
