@@ -1,7 +1,8 @@
 const { QuestionnaireModel } = require("../database");
 
-module.exports = async (req, res, next) => {
-  QuestionnaireModel.scan("sort_key")
+module.exports = async (req, res, next, model = QuestionnaireModel) => {
+  model
+    .scan("sort_key")
     .beginsWith("v0_")
     .exec((err, questionnaires) => {
       if (err) {

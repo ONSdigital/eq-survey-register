@@ -1,6 +1,6 @@
-const { QuestionnaireModel, dynamoose } = require("../database");
+const { QuestionnaireModel } = require("../database");
 
-module.exports = async (req, res, next) => {
+module.exports = (req, res, next, model = QuestionnaireModel) => {
   if (!req.body) {
     return res.status(401).json();
   }
@@ -8,16 +8,18 @@ module.exports = async (req, res, next) => {
 
   const sort_key = `v0_${survey_id}_${form_type}_en`;
 
-  QuestionnaireModel.queryOne({
-    sort_key: sort_key
-  }).exec((err, survey) => {
-    if (err) {
-      res.status(500).json();
-    }
+  model
+    .queryOne({
+      sort_key: sort_key
+    })
+    .exec((err, survey) => {
+      if (err) {
+        return res.status(500).json();
+      }
 
-    if (!survey) {
-      res.status(404).json();
-    }
-    res.status(200).json(survey.schema);
-  });
+      if (!survey) {
+        return res.status(404).json();
+      }
+      return res.status(200).json(survey.schema);
+    });
 };

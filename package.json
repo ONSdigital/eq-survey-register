@@ -7,10 +7,10 @@
   "author": "\"\"",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon",
-    "start_service": "node index.js",
+    "start": "NODE_ENV=development nodemon",
+    "start_service": "NODE_ENV=production node index.js",
     "dynamodb-admin": "AWS_REGION=eu-west-1 AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy DYNAMO_ENDPOINT=http://localhost:8090 dynamodb-admin",
-    "test": "jest"
+    "test": "NODE_ENV=test jest"
   },
   "dependencies": {
     "dynamoose": "^1.10.0",
