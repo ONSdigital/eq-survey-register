@@ -1,6 +1,10 @@
 const { QuestionnaireModel } = require("../database");
 
 module.exports = async (req, res, next, model = QuestionnaireModel) => {
+  if (!req.body) {
+    return res.status(401).json();
+  }
+
   model
     .scan("sort_key")
     .beginsWith("v0_")
@@ -10,9 +14,7 @@ module.exports = async (req, res, next, model = QuestionnaireModel) => {
       }
 
       if (!questionnaires || questionnaires.length < 1) {
-        return res
-          .status(404)
-          .send("Sorry, there are no published questionnaires");
+        return res.status(404).json();
       }
 
       const publishedQuestionnaires = questionnaires.map(questionnaire => ({
@@ -25,6 +27,6 @@ module.exports = async (req, res, next, model = QuestionnaireModel) => {
         survey_version: questionnaire.survey_version
       }));
 
-      return res.status(200).send(publishedQuestionnaires);
+      return res.status(200).json(publishedQuestionnaires);
     });
 };
