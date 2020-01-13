@@ -36,18 +36,18 @@ describe("Getting a list of published questionnaires", () => {
     };
   });
 
-  it("should return a 401 if the body data is not set", () => {
+  it("should return a 401 if the body data is not set", async () => {
     const req = mockRequest();
     const res = mockResponse();
 
     model.exec = jest.fn(callback => callback(null, null));
 
-    getPublishedQuestionnaires(req, res, null, model);
+    await getPublishedQuestionnaires(req, res, null, model);
 
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
-  it("should return status 404 if questionnaire cannot be found", () => {
+  it("should return status 404 if questionnaire cannot be found", async () => {
     const req = mockRequest({
       survey_id: "googlepixel4",
       form_type: "123"
@@ -55,30 +55,30 @@ describe("Getting a list of published questionnaires", () => {
     const res = mockResponse();
     model.exec = jest.fn(callback => callback(null, null));
 
-    getPublishedQuestionnaires(req, res, null, model);
+    await getPublishedQuestionnaires(req, res, null, model);
 
     expect(res.status).toHaveBeenCalledWith(404);
 
     model.exec = jest.fn(callback => callback(null, []));
 
-    getPublishedQuestionnaires(req, res, null, model);
+    await getPublishedQuestionnaires(req, res, null, model);
 
     expect(res.status).toHaveBeenCalledWith(404);
   });
 
-  it("should return status 200 if questionnaire can be found", () => {
+  it("should return status 200 if questionnaire can be found", async () => {
     const req = mockRequest({
       survey_id: "googlepixel4",
       form_type: "123"
     });
     const res = mockResponse();
 
-    getPublishedQuestionnaires(req, res, null, model);
+    await getPublishedQuestionnaires(req, res, null, model);
 
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it("should return status 500 if a database error occurs", () => {
+  it("should return status 500 if a database error occurs", async () => {
     const req = mockRequest({
       survey_id: "googlepixel4",
       form_type: "123"
@@ -87,7 +87,7 @@ describe("Getting a list of published questionnaires", () => {
 
     model.exec = jest.fn(callback => callback(true, null));
 
-    getPublishedQuestionnaires(req, res, null, model);
+    await getPublishedQuestionnaires(req, res, null, model);
 
     expect(res.status).toHaveBeenCalledWith(500);
   });

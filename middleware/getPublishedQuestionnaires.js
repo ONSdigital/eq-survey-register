@@ -10,7 +10,7 @@ module.exports = async (req, res, next, model = QuestionnaireModel) => {
     .beginsWith("v0_")
     .exec((err, questionnaires) => {
       if (err) {
-        return res.status(500).send(err);
+        return res.status(500).json();
       }
 
       if (!questionnaires || questionnaires.length < 1) {

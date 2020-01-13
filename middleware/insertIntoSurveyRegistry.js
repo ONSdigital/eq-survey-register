@@ -1,8 +1,6 @@
 const uuid = require("uuid");
 const { QuestionnaireModel } = require("../database");
 
-const { GO_QUICK_LAUNCHER_URL, SURVEY_REGISTER_URL } = process.env;
-
 const themeLookup = {
   "Northern Ireland": "northernireland",
   ONS: "default",
@@ -41,7 +39,11 @@ const getModel = (model, options = {}) =>
     });
   });
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res, next, model = QuestionnaireModel) => {
+  if (!req.body || !res.questionnaire) {
+    return res.status(401).json();
+  }
+
   const { formTypes } = req.body;
   const pSurveys = Object.keys(formTypes).map(async key => {
     const questionnaire = Object.assign({}, res.questionnaire);
@@ -78,13 +80,13 @@ module.exports = async (req, res, next) => {
       ...globalQuestionnaireValues
     };
 
-    const latestQuestionnaire = await getModel(QuestionnaireModel, {
+    const latestQuestionnaire = await getModel(model, {
       sort_key: latestQuestionnaireSortKey
     });
 
     if (latestQuestionnaire) {
       updateModel(
-        QuestionnaireModel,
+        model,
         {
           registry_id: latestQuestionnaire.registry_id
         },
@@ -95,46 +97,23 @@ module.exports = async (req, res, next) => {
             `Latest version of ${res.questionnaire.eq_id} has been updated`
           );
         })
-        .catch(e => {
-          res.status(500).send({
-            message:
-              "Sorry, something went wrong updating the latest version in the register"
-          });
-          next(e);
-        });
+        .catch(e => res.status(500).json());
     } else {
-      saveModel(new QuestionnaireModel(latestQuestionnaireValues))
+      saveModel(new model(latestQuestionnaireValues))
         .then(() => {
           console.log(`Latest version of ${eq_id} has been saved`);
         })
-        .catch(e => {
-          res.status(500).send({
-            message:
-              "Sorry, something went wrong saving the latest version in the register"
-          });
-          next(e);
-        });
+        .catch(e => res.status(500).json());
     }
 
-    saveModel(new QuestionnaireModel(newQuestionnaireVersionValues))
+    saveModel(new model(newQuestionnaireVersionValues))
       .then(() => {
         console.log(`Version ${surveyVersion} of ${eq_id} has been saved`);
       })
-      .catch(e => {
-        res.status(500).send({
-          message:
-            "Sorry, something went wrong updating the inserting into the register"
-        });
-        next(e);
-      });
+      .catch(e => res.status(500).json());
   });
 
   await Promise.all(pSurveys);
 
-  res.json({
-    publishedSurveyUrl: `${GO_QUICK_LAUNCHER_URL}${SURVEY_REGISTER_URL}/retrieve/${
-      res.questionnaire.eq_id
-    }?${Date.now()}`
-  });
-  next();
+  return res.status(200).json();
 };
