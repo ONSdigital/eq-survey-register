@@ -1,5 +1,5 @@
 const dynamoose = require("dynamoose");
-
+console.log("Using Firestore")
 let throughput = "ON_DEMAND";
 
 let surveyRegistryTableName = "survey-registry";
