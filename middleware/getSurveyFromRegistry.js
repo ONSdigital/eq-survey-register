@@ -1,17 +1,26 @@
 const database = require("../database");
 
-module.exports = async (req, res, next) => {
-  const questionnaireId = req.params.questionnaireId;
-  const questionnaire = await new Promise((resolve, reject) => {
-    database.getModel(questionnaireId)
-  }).catch(e => {
-    res.status(500).send({
+const getSurveyFromRegistry = (req, res, next) => {
+  const id = req.params.id;
+  database.getModel(id)
+  .then((data) => {
+    if(!data){
+      res.status(500).json({ message: "No record found"});
+      next();
+    }
+    res.status(200).json(data);
+    next()
+  })
+  .catch((resopnse) => {
+    console.log(response);
+    res.status(500).json({
       message: "Sorry, could not retrieve the schema from the register"
     });
-    next(e);
-  });
-  res.send(questionnaire);
-  next();
-};
+    next();
+  })
+}; 
+
+module.exports = getSurveyFromRegistry;
+
 
 

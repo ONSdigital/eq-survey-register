@@ -13,9 +13,9 @@ const themeLookup = {
 
 module.exports = (req, res, next) => {
   const { surveyId, formTypes, surveyVersion } = req.body;
-
-  const pArray = Object.keys(formTypes).map(key => {
-    const questionnaire = Object.assign({}, res.questionnaire);
+  let error = false;
+  Object.keys(formTypes).forEach (key => {
+    const questionnaire = res.questionnaire;
     questionnaire.theme = themeLookup[key];
     questionnaire.form_type = formTypes[key];
     const model = {
@@ -27,17 +27,22 @@ module.exports = (req, res, next) => {
       survey_version: surveyVersion,
       survey: questionnaire
     }
-    if (database.saveModel(model)) {
-      console.log('Record saved')
-      } 
-    else {
-      console.log('Error saving record')
-      res.status(500).send({
-        message: "Sorry, something went wrong inserting into the register"
-      });
-      next()
-    } 
+    database.saveModel(model)
+    .then((response) => {
+      console.log("record saved");
+    })
+    .catch((response) => {
+      console.log("record not saved");
+      error = true;
     });
+  });
+  
+  if (error){
+    res.status(500).json({
+      message: "Sorry, something went wrong inserting into the register"
+    });
+    next();
+  }
 
   res.json({
     publishedSurveyUrl: `${GO_QUICK_LAUNCHER_URL}${SURVEY_REGISTER_URL}/retrieve/${

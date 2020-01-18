@@ -15,7 +15,7 @@ app.put(
   insertIntoSurveyRegistry
 );
 
-app.get("/retrieve/:questionnaireId", getSurveyFromRegistry);
+app.get("/retrieve/:id", getSurveyFromRegistry);
 
 app.get("/status", (_, res) => res.sendStatus(200));
 

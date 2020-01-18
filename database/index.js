@@ -1,3 +1,3 @@
-const SurveyRegistryModel = require(process.env.DATASTORE? './' + process.env.DATASTORE : './dynamo');
+const database = require(process.env.DATABASE? './' + process.env.DATABASE : './dynamo');
 
-module.exports = SurveyRegistryModel;
+module.exports = database;

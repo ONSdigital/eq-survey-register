@@ -20,7 +20,10 @@ services:
       - GO_QUICK_LAUNCHER_URL=http://localhost:8000/quick-launch?url=
       - PUBLISHER_URL=http://host.docker.internal:9000/publish/
       - DYNAMODB_ENDPOINT_OVERRIDE=http://host.docker.internal:8090
-      - DATASTORE=dynamo
+      - DATABASE=dynamo
+    entrypoint:
+      - yarn
+      - start
 
   dynamo:
     image: amazon/dynamodb-local

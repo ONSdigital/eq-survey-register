@@ -55,17 +55,15 @@ const SurveyRegistryModel = dynamoose.model(
   surveyRegistrySchema
 );
 
-const getModel = (questionnaireId) => {
-  SurveyRegistryModel.queryOne({ eq_id: { eq: questionnaireId } }).exec(
-  (err, questionnaire) => {
-    if (err) {
-      reject(err);
-      return;
-    }
-    resolve(questionnaire);
-  }
-  )
+const getModel = (id) => {
+  return SurveyRegistryModel.get({ id: id });
+}
+
+const saveModel = (data) => {
+  const model = new SurveyRegistryModel(data);
+  return model.save();
 };
 
-module.exports = getModel;
+
+module.exports = {getModel, saveModel};
 
