@@ -32,7 +32,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
     beforeAll ( async () => {
         jest.resetModules();
         process.env.DATABASE = databaseName;
-        getSurveyFromRegistry = require("./getSurveyFromRegistry");
+        getQuestionnaireFromRegistry = require("./getQuestionnaireFromRegistry");
         database = require("../database");
         await database.saveModel(mockModel());
     });
@@ -41,7 +41,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         res = mockResponse();
         req = mockRequest();
         req.params.id = "12345";
-        await getSurveyFromRegistry(req, res, next); 
+        await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json.mock.calls[0][0].eq_id).toBe("678");
     });
@@ -50,7 +50,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         res = mockResponse();
         req = mockRequest();
         req.params.id = "1234";
-        await getSurveyFromRegistry(req, res, next); 
+        await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ message: "No record found"});
     });

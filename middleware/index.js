@@ -1,9 +1,9 @@
-const getSurveyFromRegistry = require("./getSurveyFromRegistry");
-const getSurveyFromPublisher = require("./getSurveyFromPublisher");
+const getQuestionnaireFromRegistry = require("./getQuestionnaireFromRegistry");
+const getQuestionnaireFromPublisher = require("./getQuestionnaireFromPublisher");
 const insertIntoSurveyRegistry = require("./insertIntoSurveyRegistry");
 
 module.exports = {
-  getSurveyFromRegistry,
-  getSurveyFromPublisher,
+  getQuestionnaireFromRegistry,
+  getQuestionnaireFromPublisher,
   insertIntoSurveyRegistry
 };

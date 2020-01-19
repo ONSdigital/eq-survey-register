@@ -1,8 +1,8 @@
 const express = require("express");
 
 const {
-  getSurveyFromRegistry,
-  getSurveyFromPublisher,
+  getSQuestionnaireFromRegistry,
+  getQuestionnaireFromPublisher,
   insertIntoSurveyRegistry
 } = require("./middleware");
 
@@ -11,11 +11,11 @@ const app = express();
 app.put(
   "/submit",
   express.json(),
-  getSurveyFromPublisher,
+  getQuestionnaireFromPublisher,
   insertIntoSurveyRegistry
 );
 
-app.get("/retrieve/:id", getSurveyFromRegistry);
+app.get("/retrieve/:id", getQuestionnaireFromRegistry);
 
 app.get("/status", (_, res) => res.sendStatus(200));
 

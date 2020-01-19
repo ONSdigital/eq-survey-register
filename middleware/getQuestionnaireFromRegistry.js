@@ -1,6 +1,6 @@
 const database = require("../database");
 
-const getSurveyFromRegistry = async (req, res, next) => {
+const getQuestionnaireFromRegistry = async (req, res, next) => {
   const id = req.params.id;
   try{
     const data = await database.getModel(id)
@@ -20,7 +20,7 @@ const getSurveyFromRegistry = async (req, res, next) => {
   }
 }; 
 
-module.exports = getSurveyFromRegistry;
+module.exports = getQuestionnaireFromRegistry;
 
 
 
