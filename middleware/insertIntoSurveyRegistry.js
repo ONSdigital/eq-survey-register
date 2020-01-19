@@ -1,4 +1,3 @@
-const uuid = require("uuid");
 const database = require("../database");
 
 const { GO_QUICK_LAUNCHER_URL, SURVEY_REGISTER_URL } = process.env;
@@ -19,13 +18,16 @@ module.exports = (req, res, next) => {
     questionnaire.theme = themeLookup[key];
     questionnaire.form_type = formTypes[key];
     const model = {
-      id: uuid.v4(),
-      eq_id: res.questionnaire.eq_id,
+      id: questionnaire.eq_id,
+      author_id: questionnaire.eq_id,
       survey_id: surveyId,
       form_type: formTypes[key],
       date_published: Date.now(),
       survey_version: surveyVersion,
-      survey: questionnaire
+      schema: questionnaire,
+      title: questionnaire.title,
+      language: "en",
+      runner_version: "v2"
     }
     try{
     await database.saveQuestionnaire(model);

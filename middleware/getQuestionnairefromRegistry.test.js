@@ -15,19 +15,22 @@ const mockRequest = () => {
 const mockModel = () => {
     const model = {
         id: "12345",
-        eq_id: "678",
+        author_id: "678",
         survey_id: "001",
         form_type: "ONS",
         date_published: Date.now(),
         survey_version: "1",
-        survey: {eq_id:"456", test:"test123"}
+        schema: {eq_id:"456", test:"test123"},
+        title: "A test",
+        language: "en",
+        runner_version: "v2"
       }
     return model;
 }
 
 describe.each(databases)("testing get from registry" ,(databaseName) => {
 
-    let res, req, getSurveyFromRegistry, database, next = jest.fn();
+    let res, req, getQuestionnaireFromRegistry, database, next = jest.fn();
 
     beforeAll ( async () => {
         jest.resetModules();
@@ -43,7 +46,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         req.params.id = "12345";
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json.mock.calls[0][0].eq_id).toBe("678");
+        expect(res.json.mock.calls[0][0].author_id).toBe("678");
     });
 
     it(`should return 500 and message when not record not found using ${databaseName}`, async () => {

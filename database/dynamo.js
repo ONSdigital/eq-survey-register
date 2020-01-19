@@ -18,12 +18,16 @@ const surveyRegistrySchema = new dynamoose.Schema(
       hashKey: true,
       required: true
     },
-    eq_id: {
+    sort_key: {
       type: String,
-      required: true
+      required: true,
+      index: {
+        global: true,
+        name: "sortKey"
+      }
     },
-    survey_version: {
-      type: Number,
+    author_id: {
+      type: String,
       required: true
     },
     survey_id: {
@@ -34,17 +38,30 @@ const surveyRegistrySchema = new dynamoose.Schema(
       type: String,
       required: true
     },
-    date_published: {
+    survey_version: {
       type: String,
       required: true
     },
-    survey: {
+    language: {
+      type: String,
+      required: true
+    },
+    runner_version: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    schema: {
       type: Object,
       require: true
     }
   },
   {
-    throughput: throughput
+    throughput: throughput,
+    timestamps: true
   }
 );
 
@@ -58,8 +75,12 @@ const getQuestionnaire = (id) => {
 }
 
 const saveQuestionnaire = (data) => {
+  // ToDo - maybe add code to get latest version number in registry
+  data.sort_key = `${data.survey_version}_${data.survey_id$}_${data.form_type}_${data.language}`;
   const model = new SurveyRegistryModel(data);
-  return model.save();
+  data.sort_key = `v0_${data.survey_id$}_${data.form_type}_${data.language}`;
+  const modelLatest = new SurveyRegistryModel(data);
+  return Promise.all([model.save(), modelLatest.save()]);
 };
 
 
