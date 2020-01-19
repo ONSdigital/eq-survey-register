@@ -34,7 +34,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         process.env.DATABASE = databaseName;
         getQuestionnaireFromRegistry = require("./getQuestionnaireFromRegistry");
         database = require("../database");
-        await database.saveModel(mockModel());
+        await database.saveQuestionnaire(mockModel());
     });
 
     it(`should get a record from the registry using ${databaseName}`, async () => {

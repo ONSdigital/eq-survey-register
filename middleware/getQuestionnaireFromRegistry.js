@@ -3,7 +3,7 @@ const database = require("../database");
 const getQuestionnaireFromRegistry = async (req, res, next) => {
   const id = req.params.id;
   try{
-    const data = await database.getModel(id)
+    const data = await database.getQuestionnaire(id)
     if(!data){
       res.status(500).json({ message: "No record found"})
     }

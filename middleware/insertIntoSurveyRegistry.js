@@ -28,7 +28,7 @@ module.exports = (req, res, next) => {
       survey: questionnaire
     }
     try{
-    await database.saveModel(model);
+    await database.saveQuestionnaire(model);
     }
     catch(e){
       error = true;

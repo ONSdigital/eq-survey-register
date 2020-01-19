@@ -53,14 +53,14 @@ const SurveyRegistryModel = dynamoose.model(
   surveyRegistrySchema
 );
 
-const getModel = (id) => {
+const getQuestionnaire = (id) => {
   return SurveyRegistryModel.get({ id: id });
 }
 
-const saveModel = (data) => {
+const saveQuestionnaire = (data) => {
   const model = new SurveyRegistryModel(data);
   return model.save();
 };
-
-
-module.exports = {getModel, saveModel};
+  
+  
+module.exports = {getQuestionnaire, saveQuestionnaire};
