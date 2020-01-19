@@ -9,14 +9,36 @@
   "scripts": {
     "start": "nodemon",
     "start_service": "node index.js",
-    "dynamodb-admin": "AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy DYNAMO_ENDPOINT=http://localhost:8090 dynamodb-admin"
+    "dynamodb-admin": "AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy DYNAMO_ENDPOINT=http://localhost:8090 dynamodb-admin",
+    "lint": "eslint .",
+    "test": "./scripts/test.sh"
   },
   "dependencies": {
     "dynamoose": "^1.10.0",
     "express": "^4.17.1",
+    "jest": "^24.9.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "wait-on": "^3.3.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": false,
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!config/**/*",
+      "!coverage/**/*",
+      "!tests/**/*",
+      "!**/tests/**/*",
+      "!scripts/*",
+      "!middleware/import.js",
+      "!app.js"
+    ],
+    "watchPathIgnorePatterns": [
+      "data/"
+    ]
   },
   "devDependencies": {
     "dynamodb-admin": "^3.2.0",

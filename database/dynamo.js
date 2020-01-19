@@ -1,7 +1,5 @@
 const dynamoose = require("dynamoose");
-console.log("Using Dynamo")
 let throughput = "ON_DEMAND";
-
 let surveyRegistryTableName = "survey-registry";
 
 if (process.env.DYNAMODB_ENDPOINT_OVERRIDE) {
@@ -65,4 +63,4 @@ const saveModel = (data) => {
 };
 
 
-module.exports = {getModel, saveModel};
+module.exports = {getModel, saveModel, getOneModelByEqid};
