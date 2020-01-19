@@ -17,7 +17,7 @@ const mockRequest = () => {
     };
 }
 
-describe.each(databases)("testing with dynamo" ,(databaseName) => {
+describe.each(databases)("testing insert into registry" ,(databaseName) => {
     let res, req, next = jest.fn(), insertIntoSurveyRegistry, database;
 
     beforeAll ( async () => {
