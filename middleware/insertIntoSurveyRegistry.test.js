@@ -1,3 +1,4 @@
+const databases = ["dynamo", "firestore"]
 
 const mockResponse = () => {
     const res = {questionnaire:{eq_id:"456", test:"test123"}};
@@ -16,7 +17,7 @@ const mockRequest = () => {
     };
 }
 
-describe.each(["dynamo", "firestore"])("testing with dynamo" ,(databaseName) => {
+describe.each(databases)("testing with dynamo" ,(databaseName) => {
     let res, req, next = jest.fn(), insertIntoSurveyRegistry, database;
 
     beforeAll ( async () => {

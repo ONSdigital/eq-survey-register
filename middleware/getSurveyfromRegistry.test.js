@@ -1,3 +1,5 @@
+const databases = ["dynamo", "firestore"]
+
 const mockResponse = () => {
     const res = {};
     res.status = jest.fn().mockReturnValue(res);
@@ -23,7 +25,7 @@ const mockModel = () => {
     return model;
 }
 
-describe.each(["dynamo","firestore"])("testing get from registry" ,(databaseName) => {
+describe.each(databases)("testing get from registry" ,(databaseName) => {
 
     let res, req, getSurveyFromRegistry, database, next = jest.fn();
 

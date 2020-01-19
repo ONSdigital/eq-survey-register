@@ -63,4 +63,4 @@ const saveModel = (data) => {
 };
 
 
-module.exports = {getModel, saveModel, getOneModelByEqid};
+module.exports = {getModel, saveModel};
