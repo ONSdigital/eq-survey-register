@@ -8,13 +8,15 @@ const mockResponse = () => {
   };
 
 const mockRequest = () => {
-    req = {params:{}};
+    req = {body:{
+        survey_id: "001",
+        form_type: "ONS",
+        language: "en",}};
     return req;
 }
 
 const mockModel = () => {
     const model = {
-        id: "12345",
         author_id: "678",
         survey_id: "001",
         form_type: "ONS",
@@ -40,19 +42,29 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         await database.saveQuestionnaire(mockModel());
     });
 
-    it(`should get a record from the registry using ${databaseName}`, async () => {
+    it(`should get the latest record from the registry using ${databaseName}`, async () => {
         res = mockResponse();
         req = mockRequest();
-        req.params.id = "12345";
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json.mock.calls[0][0].author_id).toBe("678");
+        expect(res.json.mock.calls[0][0].sort_key).toBe("v0_");
+    });
+
+    it(`should get a specific version from the registry using ${databaseName}`, async () => {
+        res = mockResponse();
+        req = mockRequest();
+        req.body.version = "1";
+        await getQuestionnaireFromRegistry(req, res, next); 
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json.mock.calls[0][0].author_id).toBe("678");
+        expect(res.json.mock.calls[0][0].sort_key).toBe("v1_");
     });
 
     it(`should return 500 and message when not record not found using ${databaseName}`, async () => {
         res = mockResponse();
         req = mockRequest();
-        req.params.id = "1234";
+        req.body.survey_id = "abc";
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ message: "No record found"});

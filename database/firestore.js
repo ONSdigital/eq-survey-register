@@ -21,10 +21,7 @@ const surveyRegistrySchema = new dynamoose.Schema(
     sort_key: {
       type: String,
       required: true,
-      index: {
-        global: true,
-        name: "sortKey"
-      }
+      rangeKey: true,
     },
     author_id: {
       type: String,
@@ -35,6 +32,10 @@ const surveyRegistrySchema = new dynamoose.Schema(
       required: true
     },
     form_type: {
+      type: String,
+      required: true
+    },
+    registry_version: {
       type: String,
       required: true
     },
@@ -70,18 +71,40 @@ const SurveyRegistryModel = dynamoose.model(
   surveyRegistrySchema
 );
 
-const getQuestionnaire = (id) => {
-  return SurveyRegistryModel.get({ id: id });
+const getQuestionnaire = (params) => {
+  const hash = `${params.survey_id}_${params.form_type}_${params.language || "en"}`;
+  const sortKey = `v${params.version || "0"}_`
+  return SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
 }
 
-const saveQuestionnaire = (data) => {
-  // ToDo - maybe add code to get latest version number in registry
-  data.sort_key = `${data.survey_version}_${data.survey_id$}_${data.form_type}_${data.language}`;
-  const model = new SurveyRegistryModel(data);
-  data.sort_key = `v0_${data.survey_id$}_${data.form_type}_${data.language}`;
+const saveQuestionnaire = async (data) => {
+  data.id = `${data.survey_id}_${data.form_type}_${data.language}`;
+  data.sort_key = `v0_`;
+  const currentModel = await SurveyRegistryModel.get({id: data.id, sort_key: data.sort_key});
+  if(currentModel){
+    data.registry_version = parseInt(currentModel.registry_version) + 1;
+  }
+  else {
+    data.registry_version = 1;
+  }
+  
   const modelLatest = new SurveyRegistryModel(data);
-  return Promise.all([model.save(), modelLatest.save()]);
+  data.sort_key = `v${data.registry_version}_`;
+  const modelVersion = new SurveyRegistryModel(data);
+
+  return Promise.all([modelVersion.save(), modelLatest.save()]);
 };
 
+const getQuestionnaireSummary  = ( latest ) => {
+  const attributes = ["id", "sort_key", "survey_id", "form_type", "registry_version", "title", "language"];
+  if(latest){
+    return SurveyRegistryModel.scan('sort_key').eq("v0_").attributes(attributes).exec();
+  }
+  else{
+    return SurveyRegistryModel.scan('sort_key').not().eq("v0_").attributes(attributes).exec();
+  }
+}
 
-module.exports = {getQuestionnaire, saveQuestionnaire};
+
+
+module.exports = {getQuestionnaire, saveQuestionnaire, getQuestionnaireSummary};

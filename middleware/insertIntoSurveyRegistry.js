@@ -18,7 +18,6 @@ module.exports = (req, res, next) => {
     questionnaire.theme = themeLookup[key];
     questionnaire.form_type = formTypes[key];
     const model = {
-      id: questionnaire.eq_id,
       author_id: questionnaire.eq_id,
       survey_id: surveyId,
       form_type: formTypes[key],

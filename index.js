@@ -1,9 +1,10 @@
 const express = require("express");
 
 const {
-  getSQuestionnaireFromRegistry,
+  getQuestionnaireFromRegistry,
   getQuestionnaireFromPublisher,
-  insertIntoSurveyRegistry
+  insertIntoSurveyRegistry, 
+  getQuestionnaireSummary,
 } = require("./middleware");
 
 const app = express();
@@ -15,7 +16,10 @@ app.put(
   insertIntoSurveyRegistry
 );
 
-app.get("/retrieve/:id", getQuestionnaireFromRegistry);
+app.get("/retrieve", getQuestionnaireFromRegistry);
+
+app.get("/summary-latest", getQuestionnaireSummary(latest = true));
+app.get("/summary-all", getQuestionnaireSummary(latest = false));
 
 app.get("/status", (_, res) => res.sendStatus(200));
 
