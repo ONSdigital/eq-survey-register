@@ -8,10 +8,15 @@ const mockResponse = () => {
   };
 
 const mockRequest = () => {
-    req = {body:{
-        survey_id: "001",
-        form_type: "456",
-        language: "en",}};
+    req = {
+        params:{},
+        query:{},
+        body:{
+            survey_id: "001",
+            form_type: "456",
+            language: "en",
+        }
+    };
     return req;
 }
 
@@ -30,7 +35,7 @@ const mockModel = () => {
     return model;
 }
 
-describe.each(databases)("testing get from registry" ,(databaseName) => {
+describe.each(databases)("testing get summary" ,(databaseName) => {
 
     let res, req, database, next = jest.fn();
 
@@ -48,7 +53,8 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
     it(`should return a list of all versions of questionnaires excluding latest ${databaseName}`, async () => {
         res = mockResponse();
         req = mockRequest();
-        await getQuestionnaireSummary(req, res, next, latest = false);
+        req.latest = false;
+        await getQuestionnaireSummary(req, res, next);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"001", form_type: "456"})]));
         expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"789", form_type: "456"})]));
@@ -58,7 +64,8 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
     it(`should return a list of the latest versions of questionnaires ${databaseName}`, async () => {
         res = mockResponse();
         req = mockRequest();
-        await getQuestionnaireSummary(req, res, next, latest = true);
+        req.latest = true;
+        await getQuestionnaireSummary(req, res, next);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"001", form_type: "456"})]));
         expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"789", form_type: "456"})]));

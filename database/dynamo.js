@@ -72,8 +72,17 @@ const SurveyRegistryModel = dynamoose.model(
 );
 
 const getQuestionnaire = (params) => {
-  const hash = `${params.survey_id}_${params.form_type}_${params.language || "en"}`;
-  const sortKey = `v${params.version || "0"}_`
+  let hash, sortKey;
+  if(!params.id && (!params.survey_id || !params.form_type)){
+    throw "id or survey_id and form_type not provided in request";
+  }
+  if(params.id){
+    hash = `${params.id}`;
+  }
+  else{
+    hash = `${params.survey_id}_${params.form_type}_${params.language || "en"}`;
+  }
+  sortKey = `v${params.version || "0"}_`
   return SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
 }
 

@@ -5,6 +5,7 @@ const {
   getQuestionnaireFromPublisher,
   insertIntoSurveyRegistry, 
   getQuestionnaireSummary,
+  insetSchemaIntoSurveyRegistry,
 } = require("./middleware");
 
 const app = express();
@@ -16,10 +17,27 @@ app.put(
   insertIntoSurveyRegistry
 );
 
-app.get("/retrieve", getQuestionnaireFromRegistry);
+app.put(
+  "/submit-json",
+  express.json(),
+  insetSchemaIntoSurveyRegistry
+);
 
-app.get("/summary-latest", getQuestionnaireSummary(latest = true));
-app.get("/summary-all", getQuestionnaireSummary(latest = false));
+app.get("/retrieve", express.json(), getQuestionnaireFromRegistry);
+app.get("/retrieve/id/:id", getQuestionnaireFromRegistry);
+app.get("/retrieve/id/:id/version/:version", getQuestionnaireFromRegistry);
+
+app.get("/summary-latest", 
+  express.json(),
+  (req, res, next) => {req.latest = true, next()}, 
+  getQuestionnaireSummary
+);
+
+app.get("/summary-all", 
+  express.json(),
+  (req, res, next) => {req.latest = false, next()}, 
+  getQuestionnaireSummary
+);
 
 app.get("/status", (_, res) => res.sendStatus(200));
 

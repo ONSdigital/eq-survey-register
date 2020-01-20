@@ -11,7 +11,7 @@ const themeLookup = {
 };
 
 module.exports = (req, res, next) => {
-  const { surveyId, formTypes, surveyVersion } = req.body;
+  const { surveyId, formTypes, surveyVersion, runner_version = "v2", language = "en" } = req.body;
   let error = false;
   Object.keys(formTypes).forEach (async key => {
     const questionnaire = res.questionnaire;
@@ -25,8 +25,8 @@ module.exports = (req, res, next) => {
       survey_version: surveyVersion,
       schema: questionnaire,
       title: questionnaire.title,
-      language: "en",
-      runner_version: "v2"
+      language: language,
+      runner_version: runner_version
     }
     try{
     await database.saveQuestionnaire(model);

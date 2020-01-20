@@ -1,4 +1,4 @@
-const databases = ["dynamo", "firestore"]
+const databases = ["dynamo"]
 
 const mockResponse = () => {
     const res = {};
@@ -8,10 +8,14 @@ const mockResponse = () => {
   };
 
 const mockRequest = () => {
-    req = {body:{
-        survey_id: "001",
-        form_type: "ONS",
-        language: "en",}};
+    req = {
+        params:{},
+        query:{},
+        body:{
+            survey_id: "001",
+            form_type: "ONS",
+            language: "en",}
+    };
     return req;
 }
 
