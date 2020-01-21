@@ -4,24 +4,25 @@ set -e
 AWS_REGION=eu-west-1
 AWS_ACCESS_KEY_ID=dummy
 AWS_SECRET_ACCESS_KEY=dummy
-DYNAMO_QUESTIONNAIRE_TABLE_NAME=test-author-questionnaires
-DYNAMO_QUESTIONNAIRE_VERSION_TABLE_NAME=test-author-questionnaire-versions
-DYNAMO_COMMENTS_TABLE_NAME=test-author-comments
-DYNAMO_USER_TABLE_NAME=test-author-users
-FIREBASE_PROJECT_ID=test-firebase-id
+FIRESTORE_PROJECT_ID=dummy-project-id
+FIRESTORE_PORT=8200
 SURVEY_REGISTER_URL=http://host.docker.internal:8080
 GO_QUICK_LAUNCHER_URL=http://localhost:8000/quick-launch?url=
 PUBLISHER_URL=http://host.docker.internal:9000/publish/
 
 echo "starting Dynamo docker..."
 
+#FIRESTORE_CONTAINER_ID=$(docker run -tid -P -e FIRESTORE_PROJECT_ID=$FIRESTORE_PROJECT_ID -e port=$FIRESTORE_PORT mtlynch/firestore-emulator-docker)
 DYNAMO_CONTAINER_ID=$(docker run -tid -P -e AWS_REGION=$AWS_REGION -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY amazon/dynamodb-local)
+#FIRESTORE_HOST=$(docker port $FIRESTORE_CONTAINER_ID 8200)
 DYNAMO_HOST=$(docker port $DYNAMO_CONTAINER_ID 8000)
 
 echo "dynamo started at: $DYNAMO_HOST"
+#echo "firestore started at: $FIRESTORE_HOST"
 
 function finish {
   echo "killing docker..."
+#  docker rm -vf $FIRESTORE_CONTAINER_ID
   docker rm -vf $DYNAMO_CONTAINER_ID
 }
 trap finish EXIT
@@ -29,7 +30,9 @@ trap finish EXIT
 echo "waiting on Dynamo to start..."
 
 ./node_modules/.bin/wait-on http://$DYNAMO_HOST/shell
+#./node_modules/.bin/wait-on http://$FIRESTORE_HOST/shell
 
+#echo "firestore host : http://${FIRESTORE_HOST}"
 echo "dynamo host : http://${DYNAMO_HOST}"
 echo "running tests..."
 
