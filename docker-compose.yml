@@ -20,6 +20,8 @@ services:
       - GO_QUICK_LAUNCHER_URL=http://localhost:8000/quick-launch?url=
       - PUBLISHER_URL=http://host.docker.internal:9000/publish/
       - DYNAMODB_ENDPOINT_OVERRIDE=http://host.docker.internal:8090
+      - FIRESTORE_EMULATOR_HOST=firestore_emulator:8200
+      - FIRESTORE_PROJECT_ID=dummy-project-id
       - DATABASE=dynamo
     entrypoint:
       - yarn
@@ -29,3 +31,9 @@ services:
     image: amazon/dynamodb-local
     ports:
       - 8090:8000
+
+  firestore_emulator:
+    image: mtlynch/firestore-emulator
+    environment:
+      - FIRESTORE_PROJECT_ID=dummy-project-id
+      - PORT=8200
