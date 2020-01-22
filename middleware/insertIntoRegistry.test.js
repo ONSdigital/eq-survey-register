@@ -17,19 +17,19 @@ const mockRequest = () => {
     };
 }
 
-describe.each(databases)("testing InsertIntoSurveyRegistry" ,(databaseName) => {
+describe.each(databases)("testing InsertIntoRegistry" ,(databaseName) => {
     let res, req, next = jest.fn(), insertIntoSurveyRegistry;
 
     beforeAll (() => {
         jest.resetModules();
         process.env.DATABASE = databaseName;
-        insertIntoSurveyRegistry = require("./insertIntoSurveyRegistry");
+        insertIntoRegistry = require("./insertIntoRegistry");
     });
     
     it(`should add a record into the registry using ${databaseName}`, async () => {
         res = mockResponse();
         req = mockRequest();
-        await insertIntoSurveyRegistry(req, res, next); 
+        await insertIntoRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);   
         expect(res.json).toHaveBeenCalledWith({ message: "Ok" });
     });

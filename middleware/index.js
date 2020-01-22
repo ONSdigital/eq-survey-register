@@ -1,13 +1,13 @@
-const getQuestionnaireFromRegistry = require("./getQuestionnaireFromRegistry");
 const getQuestionnaireFromPublisher = require("./getQuestionnaireFromPublisher");
-const insertIntoSurveyRegistry = require("./insertIntoSurveyRegistry");
+const getQuestionnaireFromRegistry = require("./getQuestionnaireFromRegistry");
 const getQuestionnaireSummary = require("./getQuestionnaireSummary");
-const insetSchemaIntoSurveyRegistry = require("./insetSchemaIntoSurveyRegistry");
+const insertIntoRegistry = require("./insertIntoRegistry");
+const insertSchemaIntoRegistry = require("./insertSchemaIntoRegistry");
 
 module.exports = {
-  getQuestionnaireFromRegistry,
   getQuestionnaireFromPublisher,
-  insertIntoSurveyRegistry,
+  getQuestionnaireFromRegistry, 
   getQuestionnaireSummary,
-  insetSchemaIntoSurveyRegistry
+  insertIntoRegistry,
+  insertSchemaIntoRegistry
 };
