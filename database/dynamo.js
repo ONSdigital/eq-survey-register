@@ -87,12 +87,15 @@ const getQuestionnaire = async (params) => {
 
   try{
     schema = await SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
+    if(schema){
+      return JSON.parse(JSON.stringify(schema));
+    }
+    return;
   }
   catch(e){
+    console.log(e)
     throw ("error getting record")
   }
-
-  return JSON.parse(JSON.stringify(schema));
 }
 
 const saveQuestionnaire = async (data) => {

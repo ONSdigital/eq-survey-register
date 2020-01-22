@@ -25,13 +25,14 @@ module.exports = async (req, res, next) => {
   }
   try{
     await database.saveQuestionnaire(model);
+    res.status(200).json({ message: "Ok" });
+    next();
   }
   catch(e){
+    console.log(e);
     res.status(500).json({
         message: "Sorry, something went wrong inserting into the register"
     });
     next();
   }
-  res.status(200).json({ message: "Ok" });
-  next();
 };

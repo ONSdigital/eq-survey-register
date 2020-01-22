@@ -18,13 +18,18 @@ const getQuestionnaire = async (params) => {
   sortKey = `${params.version || "0"}`
 
   try{
-    schema = await db.collection('schemas').doc(hash).collection('versions').doc(sortKey).get();
+    const docRef = await db.collection('schemas').doc(hash).collection('versions').doc(sortKey);
+    schema = await docRef.get();
+    if (!schema.exists){
+      return;
+    }
     response = await schema.data()
+    return response;
   }
   catch(e){
+    console.log(e)
     throw ("error getting record")
   }
-  return response;
 }
 
 const saveQuestionnaire = async (data) => {
@@ -46,6 +51,7 @@ const saveQuestionnaire = async (data) => {
     await docRef.set(data);
   }
   catch(e){
+    console.log(e)
     throw("error saving record")
   } 
   return;

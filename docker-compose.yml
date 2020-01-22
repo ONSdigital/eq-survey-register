@@ -1,12 +1,22 @@
 version: "3"
 services:
+  firestore:
+    image: mtlynch/firestore-emulator-docker
+    environment:
+      - FIRESTORE_PROJECT_ID=dummy-project-id
+      - PORT=8080
+    ports:
+      - 8200:8080
+
   web:
     build:
       context: .
     depends_on:
       - dynamo
+      - firestore
     links:
       - dynamo
+      - firestore
     volumes:
       - .:/app
     ports:
@@ -20,7 +30,7 @@ services:
       - GO_QUICK_LAUNCHER_URL=http://localhost:8000/quick-launch?url=
       - PUBLISHER_URL=http://host.docker.internal:9000/publish/
       - DYNAMODB_ENDPOINT_OVERRIDE=http://host.docker.internal:8090
-      - FIRESTORE_EMULATOR_HOST=firestore_emulator:8200
+      - FIRESTORE_EMULATOR_HOST=firestore:8200
       - FIRESTORE_PROJECT_ID=dummy-project-id
       - DATABASE=firestore
     entrypoint:
@@ -32,9 +42,3 @@ services:
     ports:
       - 8090:8000
 
-  firestore:
-    image: mtlynch/cloud-firestore-emulator
-    environment:
-      - FIRESTORE_PROJECT_ID=project-test
-    ports:
-      - 8200:8080

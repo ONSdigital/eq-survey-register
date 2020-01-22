@@ -20,7 +20,7 @@ const mockRequest = () => {
     return { 
         body:{
             survey_id: "123", 
-            form_types:"O456",
+            form_type:"O456",
             survey_version:"2",
             theme: "ONS",
             language: "en",
@@ -29,7 +29,7 @@ const mockRequest = () => {
     }
 }
 
-describe.each(databases)("testing InsertIntoSurveyRegistry" ,(databaseName) => {
+describe.each(databases)("testing InsertSchemaIntoRegistry" ,(databaseName) => {
     let res, req, next = jest.fn(), insertIntoSurveyRegistry;
 
     beforeAll (() => {

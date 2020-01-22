@@ -1,26 +1,25 @@
+//console.log(process.env);
 const express = require("express");
 
 const {
   getQuestionnaireFromRegistry,
   getQuestionnaireFromPublisher,
-  insertIntoSurveyRegistry, 
+  insertIntoRegistry, 
   getQuestionnaireSummary,
-  insetSchemaIntoSurveyRegistry,
+  insertSchemaIntoRegistry,
 } = require("./middleware");
 
 const app = express();
 
-app.put(
-  "/submit",
-  express.json(),
-  getQuestionnaireFromPublisher,
-  insertIntoSurveyRegistry
+app.put("/submit", 
+  express.json(), 
+  getQuestionnaireFromPublisher, 
+  insertIntoRegistry
 );
 
-app.put(
-  "/submit-json",
-  express.json(),
-  insetSchemaIntoSurveyRegistry
+app.put("/submit-json", 
+  express.json(), 
+  insertSchemaIntoRegistry
 );
 
 app.get("/retrieve", express.json(), getQuestionnaireFromRegistry);
