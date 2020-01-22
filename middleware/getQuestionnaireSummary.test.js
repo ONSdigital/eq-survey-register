@@ -1,4 +1,4 @@
-const databases = ["dynamo", "firestore"]
+const databases = ["dynamo"]
 
 const mockResponse = () => {
     const res = {};

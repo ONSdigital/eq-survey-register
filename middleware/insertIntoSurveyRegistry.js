@@ -10,10 +10,10 @@ const themeLookup = {
   "UKIS ONS": "ukis"
 };
 
-module.exports = (req, res, next) => {
+const insertIntoSurveyResister =  (req, res, next) => {
   const { surveyId, formTypes, surveyVersion, runner_version = "v2", language = "en" } = req.body;
   let error = false;
-  Object.keys(formTypes).forEach (async key => {
+  Object.keys(formTypes).forEach (async (key) => {
     const questionnaire = res.questionnaire;
     questionnaire.theme = themeLookup[key];
     questionnaire.form_type = formTypes[key];
@@ -28,12 +28,7 @@ module.exports = (req, res, next) => {
       language: language,
       runner_version: runner_version
     }
-    try{
-    await database.saveQuestionnaire(model);
-    }
-    catch(e){
-      error = true;
-    }
+    error = database.saveQuestionnaire(model);
   });
   
   if (error){
@@ -46,3 +41,5 @@ module.exports = (req, res, next) => {
   next();
 
 };
+
+module.exports = insertIntoSurveyResister;

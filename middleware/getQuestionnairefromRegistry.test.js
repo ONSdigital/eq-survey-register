@@ -1,4 +1,4 @@
-const databases = ["dynamo", "firestore"]
+const databases = ["dynamo"]
 
 const mockResponse = () => {
     const res = {};
@@ -51,8 +51,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         req = mockRequest();
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json.mock.calls[0][0].author_id).toBe("678");
-        expect(res.json.mock.calls[0][0].sort_key).toBe("v0_");
+        expect(res.json).toBeCalledWith(expect.objectContaining({author_id:"678", sort_key:"v0_"}));
     });
 
     it(`should get a specific version from the registry using ${databaseName}`, async () => {
@@ -61,8 +60,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         req.body.version = "1";
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json.mock.calls[0][0].author_id).toBe("678");
-        expect(res.json.mock.calls[0][0].sort_key).toBe("v1_");
+        expect(res.json).toBeCalledWith(expect.objectContaining({author_id:"678", sort_key:"v1_"}));
     });
 
     it(`should return 500 and message when not record not found using ${databaseName}`, async () => {

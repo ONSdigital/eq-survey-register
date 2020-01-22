@@ -1,8 +1,7 @@
 const database = require("../database");
 
 const getQuestionnaireFromRegistry = async (req, res, next) => {
-  try{
-    let requestParams;
+    let requestParams, data;
     if (req.params.id) {
       requestParams = {id: req.params.id, version: req.params.version || "0"};
     }
@@ -12,7 +11,15 @@ const getQuestionnaireFromRegistry = async (req, res, next) => {
     else {
       requestParams = req.body;
     }
-    const data = await database.getQuestionnaire(requestParams);
+
+    try{ data = await database.getQuestionnaire(requestParams);}
+    catch(e){
+      res.status(500).json({
+        message: "Sorry, could not retrieve the schema from the register"
+      });
+      next();
+    }
+
     if(!data){
       res.status(500).json({ message: "No record found"})
     }
@@ -20,13 +27,7 @@ const getQuestionnaireFromRegistry = async (req, res, next) => {
       res.status(200).json(data);
     }
     next()
-  }
-  catch(e){
-    res.status(500).json({
-      message: "Sorry, could not retrieve the schema from the register"
-    });
-    next();
-  }
+
 }; 
 
 module.exports = getQuestionnaireFromRegistry;

@@ -1,10 +1,9 @@
 {
   "name": "eq-survey-register",
   "version": "1.0.0",
-  "description": "Survey register is a api created to communicate with the survey registry in assit in pulication of eq surveys.",
   "main": "index.js",
-  "repository": "https://github.com/ONSdigital/eq-survey-register",
-  "author": "\"\"",
+  "repository": "https://github.com/ONSdigital/eq-survey-register.git",
+  "author": "martyncolmer <martyc1974@hotmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "nodemon",
@@ -14,13 +13,18 @@
     "test": "./scripts/test.sh"
   },
   "dependencies": {
-    "dynamoose": "^1.10.0",
+    "@google-cloud/firestore": "^3.4.0",
+    "dynamoose": "^1.11.1",
     "express": "^4.17.1",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "uuid": "^3.3.3",
-    "wait-on": "^3.3.0"
+    "request-promise-native": "^1.0.8",
+    "uuid": "^3.4.0",
+    "wait-on": "^4.0.0"
+  },
+  "devDependencies": {
+    "dynamodb-admin": "^3.2.0",
+    "nodemon": "^2.0.2"
   },
   "jest": {
     "testEnvironment": "node",
@@ -39,9 +43,5 @@
     "watchPathIgnorePatterns": [
       "data/"
     ]
-  },
-  "devDependencies": {
-    "dynamodb-admin": "^3.2.0",
-    "nodemon": "^1.19.1"
   }
 }

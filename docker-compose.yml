@@ -22,7 +22,7 @@ services:
       - DYNAMODB_ENDPOINT_OVERRIDE=http://host.docker.internal:8090
       - FIRESTORE_EMULATOR_HOST=firestore_emulator:8200
       - FIRESTORE_PROJECT_ID=dummy-project-id
-      - DATABASE=dynamo
+      - DATABASE=firestore
     entrypoint:
       - yarn
       - start
@@ -32,8 +32,9 @@ services:
     ports:
       - 8090:8000
 
-  firestore_emulator:
-    image: mtlynch/firestore-emulator
+  firestore:
+    image: mtlynch/cloud-firestore-emulator
     environment:
-      - FIRESTORE_PROJECT_ID=dummy-project-id
-      - PORT=8200
+      - FIRESTORE_PROJECT_ID=project-test
+    ports:
+      - 8200:8080

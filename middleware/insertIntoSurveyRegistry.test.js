@@ -1,7 +1,7 @@
-const databases = ["dynamo", "firestore"]
+const databases = ["dynamo"]
 
 const mockResponse = () => {
-    const res = {questionnaire:{eq_id:"456", test:"test123"}};
+    const res = {questionnaire:{eq_id:"456", title:"test123"}};
     res.status = jest.fn().mockReturnValue(res);
     res.json = jest.fn().mockReturnValue(res);
     return res;
@@ -10,7 +10,7 @@ const mockResponse = () => {
 const mockRequest = () => {
     return { 
         body:{
-            surveyid:"1", 
+            surveyId:"1", 
             formTypes:{"ONS":"123"},
             surveyVersion:"2",
         }
@@ -24,7 +24,7 @@ describe.each(databases)("testing insert into registry" ,(databaseName) => {
         jest.resetModules();
         process.env.DATABASE = databaseName;
         insertIntoSurveyRegistry = require("./insertIntoSurveyRegistry");
-        database = require("../database");
+        //database = require("../database");
     });
     
     it(`should add a record into the registry using ${databaseName}`, async () => {

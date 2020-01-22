@@ -71,7 +71,7 @@ const SurveyRegistryModel = dynamoose.model(
   surveyRegistrySchema
 );
 
-const getQuestionnaire = (params) => {
+const getQuestionnaire = async (params) => {
   let hash, sortKey;
   if(!params.id && (!params.survey_id || !params.form_type)){
     throw "id or survey_id and form_type not provided in request";
@@ -83,34 +83,54 @@ const getQuestionnaire = (params) => {
     hash = `${params.survey_id}_${params.form_type}_${params.language || "en"}`;
   }
   sortKey = `v${params.version || "0"}_`
-  return SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
+  
+  const schema = await SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
+
+  return JSON.parse(JSON.stringify(schema));
 }
 
 const saveQuestionnaire = async (data) => {
   data.id = `${data.survey_id}_${data.form_type}_${data.language}`;
   data.sort_key = `v0_`;
   const currentModel = await SurveyRegistryModel.get({id: data.id, sort_key: data.sort_key});
+
   if(currentModel){
-    data.registry_version = parseInt(currentModel.registry_version) + 1;
+    data.registry_version = (parseInt(currentModel.registry_version) + 1).toString();
   }
   else {
-    data.registry_version = 1;
+    data.registry_version = "1";
   }
-  
+
   const modelLatest = new SurveyRegistryModel(data);
+  try{
+    await modelLatest.save();
+  }
+  catch(e){
+    console.log(e);
+    return false;
+  }
+
   data.sort_key = `v${data.registry_version}_`;
   const modelVersion = new SurveyRegistryModel(data);
-
-  return Promise.all([modelVersion.save(), modelLatest.save()]);
+  try{
+    await modelVersion.save(); 
+  }
+  catch(e){
+    console.log(e);
+    return false;
+  }
+  return true;
 };
 
-const getQuestionnaireSummary  = ( latest ) => {
+const getQuestionnaireSummary  = async ( latest ) => {
   const attributes = ["id", "sort_key", "survey_id", "form_type", "registry_version", "title", "language"];
   if(latest){
-    return SurveyRegistryModel.scan('sort_key').eq("v0_").attributes(attributes).exec();
+    const data = await SurveyRegistryModel.scan('sort_key').eq("v0_").attributes(attributes).exec();
+    return JSON.parse(JSON.stringify(data));
   }
   else{
-    return SurveyRegistryModel.scan('sort_key').not().eq("v0_").attributes(attributes).exec();
+    const data = await SurveyRegistryModel.scan('sort_key').not().eq("v0_").attributes(attributes).exec();
+    return JSON.parse(JSON.stringify(data));
   }
 }
 

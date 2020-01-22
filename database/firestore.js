@@ -1,78 +1,10 @@
-const dynamoose = require("dynamoose");
-let throughput = "ON_DEMAND";
-let surveyRegistryTableName = "survey-registry";
+const {Firestore} = require('@google-cloud/firestore');
 
-if (process.env.DYNAMODB_ENDPOINT_OVERRIDE) {
-  dynamoose.local(process.env.DYNAMODB_ENDPOINT_OVERRIDE);
-  throughput = { read: 10, write: 10 }; // DynamoDB local doesn't yet support on-demand
-}
+const db = new Firestore();
 
-if (process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME) {
-  surveyRegistryTableName = process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME;
-}
+const getQuestionnaire = async (params) => {
+  let hash, sortKey, schema;
 
-const surveyRegistrySchema = new dynamoose.Schema(
-  {
-    id: {
-      type: String,
-      hashKey: true,
-      required: true
-    },
-    sort_key: {
-      type: String,
-      required: true,
-      rangeKey: true,
-    },
-    author_id: {
-      type: String,
-      required: true
-    },
-    survey_id: {
-      type: String,
-      required: true
-    },
-    form_type: {
-      type: String,
-      required: true
-    },
-    registry_version: {
-      type: String,
-      required: true
-    },
-    survey_version: {
-      type: String,
-      required: true
-    },
-    language: {
-      type: String,
-      required: true
-    },
-    runner_version: {
-      type: String,
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    schema: {
-      type: Object,
-      require: true
-    }
-  },
-  {
-    throughput: throughput,
-    timestamps: true
-  }
-);
-
-const SurveyRegistryModel = dynamoose.model(
-  surveyRegistryTableName,
-  surveyRegistrySchema
-);
-
-const getQuestionnaire = (params) => {
-  let hash, sortKey;
   if(!params.id && (!params.survey_id || !params.form_type)){
     throw "id or survey_id and form_type not provided in request";
   }
@@ -83,37 +15,69 @@ const getQuestionnaire = (params) => {
     hash = `${params.survey_id}_${params.form_type}_${params.language || "en"}`;
   }
   sortKey = `v${params.version || "0"}_`
-  return SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
+
+  schema = await db.collection('schemas').doc(hash).collection('versions').doc(sortKey).get();
+  return schema.data();
+
 }
 
 const saveQuestionnaire = async (data) => {
   data.id = `${data.survey_id}_${data.form_type}_${data.language}`;
   data.sort_key = `v0_`;
-  const currentModel = await SurveyRegistryModel.get({id: data.id, sort_key: data.sort_key});
-  if(currentModel){
-    data.registry_version = parseInt(currentModel.registry_version) + 1;
+  let currentModel;
+  let docRef = await db.collection('schemas').doc(data.id).collection('versions').doc(data.sort_key)
+  try{
+    currentModel = await docRef.get();
+  }
+  catch(e){
+    console.log(e);
+    return false;
+  }
+  if(currentModel.exists){
+    data.registry_version = (parseInt(currentModel.get('registry_version')) + 1).toString();
   }
   else {
-    data.registry_version = 1;
+    data.registry_version = "1";  
   }
-  
-  const modelLatest = new SurveyRegistryModel(data);
-  data.sort_key = `v${data.registry_version}_`;
-  const modelVersion = new SurveyRegistryModel(data);
 
-  return Promise.all([modelVersion.save(), modelLatest.save()]);
+  try{
+    await docRef.set(data);
+  }
+  catch(e){
+      console.log(e);
+      return false;
+  }
+  data.sort_key = `v${data.registry_version}_`;
+  docRef = await db.collection('schemas').doc(data.id).collection('versions').doc(data.sort_key)
+  try{
+    await docRef.set(data);
+  }
+  catch(e){
+      console.log(e);
+      return false;
+  } 
+  return true
 };
 
-const getQuestionnaireSummary  = ( latest ) => {
+const getQuestionnaireSummary  = async ( latest ) => {
   const attributes = ["id", "sort_key", "survey_id", "form_type", "registry_version", "title", "language"];
+
+  let result, colRef, response = [];
   if(latest){
-    return SurveyRegistryModel.scan('sort_key').eq("v0_").attributes(attributes).exec();
+    colRef = await db.collectionGroup('versions').where('sort_key', '==', 'v0_').select(...attributes);
+    result = await colRef.get();
   }
   else{
-    return SurveyRegistryModel.scan('sort_key').not().eq("v0_").attributes(attributes).exec();
+    colRef = await db.collectionGroup('versions').where('sort_key', '==', 'v1_').select(...attributes);
+    result = await colRef.get();
   }
+
+  result.forEach((doc) => {
+    response.push(doc.data());
+  });
+  
+  return response 
+
 }
 
-
-
-module.exports = {getQuestionnaire, saveQuestionnaire, getQuestionnaireSummary};
+module.exports = {saveQuestionnaire, getQuestionnaire, getQuestionnaireSummary};
