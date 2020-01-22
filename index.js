@@ -26,6 +26,10 @@ app.put(
 app.get("/retrieve", express.json(), getQuestionnaireFromRegistry);
 app.get("/retrieve/id/:id", getQuestionnaireFromRegistry);
 app.get("/retrieve/id/:id/version/:version", getQuestionnaireFromRegistry);
+app.get("/retrieve/survey_id/:survey_id/form_type/:formtype", getQuestionnaireFromRegistry);
+app.get("/retrieve/survey_id/:survey_id/form_type/:formtype/language/:language", getQuestionnaireFromRegistry);
+app.get("/retrieve/survey_id/:survey_id/form_type/:formtype/version/:version", getQuestionnaireFromRegistry);
+app.get("/retrieve/survey_id/:survey_id/form_type/:formtype/language/:language/version/:version", getQuestionnaireFromRegistry);
 
 app.get("/summary-latest", 
   express.json(),

@@ -20,7 +20,7 @@ const mockRequest = () => {
     };
 }
 
-describe.each(databases)("testing databases" ,(databaseName) => {
+describe.each(databases)("testing database modules" ,(databaseName) => {
     let model, req, database, data;
 
     beforeAll ( async () => {
@@ -35,21 +35,23 @@ describe.each(databases)("testing databases" ,(databaseName) => {
     });
 
     it(`should save a schema into the database using ${databaseName}`, async () => {
-        expect(await database.saveQuestionnaire(model)).toBe(true); 
+        expect( async () => {await database.saveQuestionnaire(model)}).not.toThrow(); 
     });
     
     it(`should retrieve the latest version using ${databaseName}`, async () => {
+        await database.saveQuestionnaire(model)
         data = await database.getQuestionnaire(req);
+        model.sort_key = "0"
         expect(data).toMatchObject(model);
-        expect(data).toMatchObject({sort_key: "v0_", registry_version: "1"});
+        expect(data).toMatchObject({sort_key: "0", registry_version: "1"});
     });
 
     it(`should retrieve a specific version using ${databaseName}`, async () => {
         req.version = "1";
-        model.sort_key = "v1_"
+        model.sort_key = "1"
         data = await database.getQuestionnaire(req);
         expect(data).toMatchObject(model);
-        expect(data).toMatchObject({sort_key: "v1_", registry_version: "1"});
+        expect(data).toMatchObject({sort_key: "1", registry_version: "1"});
     });
 
     it(`should retieve a list of latest schema version using ${databaseName}`, async () => {
@@ -57,14 +59,14 @@ describe.each(databases)("testing databases" ,(databaseName) => {
         model.survey_id = "456"
         await database.saveQuestionnaire(model); 
         data = await database.getQuestionnaireSummary(latest = true);
-        expect(data).toEqual(expect.arrayContaining([expect.objectContaining({sort_key:"v0_"})]));
-        expect(data).toEqual(expect.not.arrayContaining([expect.objectContaining({sort_key:"v1_"})]));
+        expect(data).toEqual(expect.arrayContaining([expect.objectContaining({sort_key:"0"})]));
+        expect(data).toEqual(expect.not.arrayContaining([expect.objectContaining({sort_key:"1"})]));
     });
 
     it(`should retieve a list of all schema version using ${databaseName}`, async () => {
         data = await database.getQuestionnaireSummary(latest = false);
-        expect(data).toEqual(expect.arrayContaining([expect.objectContaining({sort_key:"v1_"})]));
-        expect(data).toEqual(expect.not.arrayContaining([expect.objectContaining({sort_key:"v0_"})]));
+        expect(data).toEqual(expect.arrayContaining([expect.objectContaining({sort_key:"1"})]));
+        expect(data).toEqual(expect.not.arrayContaining([expect.objectContaining({sort_key:"0"})]));
     });
 
 });

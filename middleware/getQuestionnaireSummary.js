@@ -1,8 +1,8 @@
-const { getQuestionnaireSummary } = require("../database");
+const { getQuestionnaireSummary: getSummary } = require("../database");
 
-module.exports = async (req, res, next) => {
+const getQuestionnaireSummary = async (req, res, next) => {
     try{
-        const Questionnaires = await getQuestionnaireSummary(req.latest);
+        const Questionnaires = await getSummary(req.latest);
         res.status(200).json(Questionnaires);
     }
     catch(e){
@@ -11,3 +11,5 @@ module.exports = async (req, res, next) => {
     }
   
 };
+
+module.exports = getQuestionnaireSummary;

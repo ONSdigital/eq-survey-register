@@ -2,11 +2,11 @@ const database = require("../database");
 
 const getQuestionnaireFromRegistry = async (req, res, next) => {
     let requestParams, data;
-    if (req.params.id) {
-      requestParams = {id: req.params.id, version: req.params.version || "0"};
+    if (req.params.id || (req.params.survey_id && req.params.form_type)) {
+      requestParams = req.params;
     }
     else if (req.query.id){
-      requestParams = {id: req.query.id, version: req.query.version || "0"};
+      requestParams = req.query;
     }
     else {
       requestParams = req.body;

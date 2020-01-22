@@ -1,4 +1,4 @@
-const databases = ["dynamo"]
+const databases = ["dynamo", "firestore"]
 
 const mockResponse = () => {
     const res = {};
@@ -35,7 +35,7 @@ const mockModel = () => {
     return model;
 }
 
-describe.each(databases)("testing get summary" ,(databaseName) => {
+describe.each(databases)("testing getQuestionnaireSummary" ,(databaseName) => {
 
     let res, req, database, next = jest.fn();
 
@@ -50,17 +50,6 @@ describe.each(databases)("testing get summary" ,(databaseName) => {
         await database.saveQuestionnaire(mock);
     });
 
-    it(`should return a list of all versions of questionnaires excluding latest ${databaseName}`, async () => {
-        res = mockResponse();
-        req = mockRequest();
-        req.latest = false;
-        await getQuestionnaireSummary(req, res, next);
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"001", form_type: "456"})]));
-        expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"789", form_type: "456"})]));
-        expect(res.json).toBeCalledWith(expect.arrayContaining([expect.not.objectContaining({sort_key:"v0_"})]));
-    });
-
     it(`should return a list of the latest versions of questionnaires ${databaseName}`, async () => {
         res = mockResponse();
         req = mockRequest();
@@ -69,7 +58,17 @@ describe.each(databases)("testing get summary" ,(databaseName) => {
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"001", form_type: "456"})]));
         expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"789", form_type: "456"})]));
-        expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({sort_key:"v0_"})]));
+        expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({sort_key:"0"})]));
     });
 
+    it(`should return a list of all versions of questionnaires excluding latest ${databaseName}`, async () => {
+        res = mockResponse();
+        req = mockRequest();
+        req.latest = false;
+        await getQuestionnaireSummary(req, res, next);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"001", form_type: "456"})]));
+        expect(res.json).toBeCalledWith(expect.arrayContaining([expect.objectContaining({survey_id:"789", form_type: "456"})]));
+        expect(res.json).toBeCalledWith(expect.arrayContaining([expect.not.objectContaining({sort_key:"0"})]));
+    });
 });

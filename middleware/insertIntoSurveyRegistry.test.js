@@ -1,4 +1,4 @@
-const databases = ["dynamo"]
+const databases = ["dynamo", "firestore"]
 
 const mockResponse = () => {
     const res = {questionnaire:{eq_id:"456", title:"test123"}};
@@ -17,14 +17,13 @@ const mockRequest = () => {
     };
 }
 
-describe.each(databases)("testing insert into registry" ,(databaseName) => {
-    let res, req, next = jest.fn(), insertIntoSurveyRegistry, database;
+describe.each(databases)("testing InsertIntoSurveyRegistry" ,(databaseName) => {
+    let res, req, next = jest.fn(), insertIntoSurveyRegistry;
 
-    beforeAll ( async () => {
+    beforeAll (() => {
         jest.resetModules();
         process.env.DATABASE = databaseName;
         insertIntoSurveyRegistry = require("./insertIntoSurveyRegistry");
-        //database = require("../database");
     });
     
     it(`should add a record into the registry using ${databaseName}`, async () => {

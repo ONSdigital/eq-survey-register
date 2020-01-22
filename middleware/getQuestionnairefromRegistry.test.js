@@ -1,4 +1,4 @@
-const databases = ["dynamo"]
+const databases = ["dynamo", "firestore"]
 
 const mockResponse = () => {
     const res = {};
@@ -34,7 +34,7 @@ const mockModel = () => {
     return model;
 }
 
-describe.each(databases)("testing get from registry" ,(databaseName) => {
+describe.each(databases)("testing getQuestionnaireFromRegistry" ,(databaseName) => {
 
     let res, req, getQuestionnaireFromRegistry, database, next = jest.fn();
 
@@ -51,7 +51,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         req = mockRequest();
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toBeCalledWith(expect.objectContaining({author_id:"678", sort_key:"v0_"}));
+        expect(res.json).toBeCalledWith(expect.objectContaining({author_id:"678", sort_key:"0"}));
     });
 
     it(`should get a specific version from the registry using ${databaseName}`, async () => {
@@ -60,7 +60,7 @@ describe.each(databases)("testing get from registry" ,(databaseName) => {
         req.body.version = "1";
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toBeCalledWith(expect.objectContaining({author_id:"678", sort_key:"v1_"}));
+        expect(res.json).toBeCalledWith(expect.objectContaining({author_id:"678", sort_key:"1"}));
     });
 
     it(`should return 500 and message when not record not found using ${databaseName}`, async () => {

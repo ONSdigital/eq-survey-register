@@ -72,68 +72,67 @@ const SurveyRegistryModel = dynamoose.model(
 );
 
 const getQuestionnaire = async (params) => {
-  let hash, sortKey;
+  let hash, sortKey, schema;
   if(!params.id && (!params.survey_id || !params.form_type)){
     throw "id or survey_id and form_type not provided in request";
   }
+
   if(params.id){
     hash = `${params.id}`;
   }
   else{
     hash = `${params.survey_id}_${params.form_type}_${params.language || "en"}`;
   }
-  sortKey = `v${params.version || "0"}_`
-  
-  const schema = await SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
+  sortKey = `${params.version || "0"}`
+
+  try{
+    schema = await SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
+  }
+  catch(e){
+    throw ("error getting record")
+  }
 
   return JSON.parse(JSON.stringify(schema));
 }
 
 const saveQuestionnaire = async (data) => {
   data.id = `${data.survey_id}_${data.form_type}_${data.language}`;
-  data.sort_key = `v0_`;
+  data.sort_key = `0`;
   const currentModel = await SurveyRegistryModel.get({id: data.id, sort_key: data.sort_key});
-
-  if(currentModel){
-    data.registry_version = (parseInt(currentModel.registry_version) + 1).toString();
-  }
-  else {
-    data.registry_version = "1";
-  }
-
-  const modelLatest = new SurveyRegistryModel(data);
   try{
+    if(currentModel){
+      data.registry_version = (parseInt(currentModel.registry_version) + 1).toString();
+    }
+    else {
+      data.registry_version = "1";
+    }
+    const modelLatest = new SurveyRegistryModel(data);
     await modelLatest.save();
+    data.sort_key = `${data.registry_version}`;
+    const modelVersion = new SurveyRegistryModel(data);
+    await modelVersion.save();
   }
   catch(e){
-    console.log(e);
-    return false;
+    throw("error saving record")
   }
-
-  data.sort_key = `v${data.registry_version}_`;
-  const modelVersion = new SurveyRegistryModel(data);
-  try{
-    await modelVersion.save(); 
-  }
-  catch(e){
-    console.log(e);
-    return false;
-  }
-  return true;
-};
-
-const getQuestionnaireSummary  = async ( latest ) => {
-  const attributes = ["id", "sort_key", "survey_id", "form_type", "registry_version", "title", "language"];
-  if(latest){
-    const data = await SurveyRegistryModel.scan('sort_key').eq("v0_").attributes(attributes).exec();
-    return JSON.parse(JSON.stringify(data));
-  }
-  else{
-    const data = await SurveyRegistryModel.scan('sort_key').not().eq("v0_").attributes(attributes).exec();
-    return JSON.parse(JSON.stringify(data));
-  }
+  return;
 }
 
-
+const getQuestionnaireSummary  = async ( latest ) => {
+  let data;
+  const attributes = ["id", "sort_key", "survey_id", "form_type", "registry_version", "title", "language"];
+  try{
+    if(latest){
+        data = await SurveyRegistryModel.scan('sort_key').eq("0").attributes(attributes).exec();
+    }
+    else{
+        data = await SurveyRegistryModel.scan('sort_key').not().eq("0").attributes(attributes).exec();
+    }
+  }
+  catch(e){
+    throw("error getting summary")
+  }
+  return JSON.parse(JSON.stringify(data));
+}
 
 module.exports = {getQuestionnaire, saveQuestionnaire, getQuestionnaireSummary};

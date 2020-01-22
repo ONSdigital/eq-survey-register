@@ -2,7 +2,7 @@ const request = require("request-promise-native");
 
 const { PUBLISHER_URL } = process.env;
 
-module.exports = async (req, res, next) => {
+getQuestionnaireFromPublisher = async (req, res, next) => {
   const questionnaireId = req.body.questionnaireId;
   const options = {
     json: true,
@@ -18,3 +18,5 @@ module.exports = async (req, res, next) => {
     });
   next();
 };
+
+module.exports = getQuestionnaireFromPublisher;

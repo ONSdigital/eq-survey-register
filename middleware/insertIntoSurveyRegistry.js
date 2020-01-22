@@ -10,7 +10,7 @@ const themeLookup = {
   "UKIS ONS": "ukis"
 };
 
-const insertIntoSurveyResister =  (req, res, next) => {
+const insertIntoSurveyResister = (req, res, next) => {
   const { surveyId, formTypes, surveyVersion, runner_version = "v2", language = "en" } = req.body;
   let error = false;
   Object.keys(formTypes).forEach (async (key) => {
@@ -28,7 +28,13 @@ const insertIntoSurveyResister =  (req, res, next) => {
       language: language,
       runner_version: runner_version
     }
-    error = database.saveQuestionnaire(model);
+    try{
+      await database.saveQuestionnaire(model);
+    }
+    catch(e){
+      console.log(e);
+      error = true
+    }
   });
   
   if (error){
@@ -36,9 +42,11 @@ const insertIntoSurveyResister =  (req, res, next) => {
       message: "Sorry, something went wrong inserting into the register"
     });
     next();
-  } 
-  res.status(200).json({ message: "Ok" });
-  next();
+  }
+  else{
+    res.status(200).json({ message: "Ok" });
+    next();
+  }
 
 };
 
