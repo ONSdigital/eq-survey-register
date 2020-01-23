@@ -70,7 +70,7 @@ const getQuestionnaireSummary  = async ( latest ) => {
   const attributes = ["id", "sort_key", "survey_id", "form_type", "registry_version", "title", "language"];
 
   let result, colRef, sortOp, response = [];
-  latest ? sortOp = "=" : sortOp = ">"
+  latest ? sortOp = "==" : sortOp = ">"
   try{
     colRef = await db.collectionGroup('versions').where('sort_key', sortOp, '0').select(...attributes);
     result = await colRef.get();

@@ -11,16 +11,11 @@ const {
 
 const app = express();
 
-app.put("/submit", 
-  express.json(), 
-  getQuestionnaireFromPublisher, 
-  insertIntoRegistry
-);
+app.put("/submit", express.json(),  getQuestionnaireFromPublisher,  insertIntoRegistry);
+app.post("/submit", express.json(),  getQuestionnaireFromPublisher,  insertIntoRegistry);
+app.put("/submit-json", express.json(),  insertSchemaIntoRegistry);
+app.post("/submit-json", express.json(),  insertSchemaIntoRegistry);
 
-app.put("/submit-json", 
-  express.json(), 
-  insertSchemaIntoRegistry
-);
 
 app.get("/retrieve", express.json(), getQuestionnaireFromRegistry);
 app.get("/retrieve/id/:id", getQuestionnaireFromRegistry);

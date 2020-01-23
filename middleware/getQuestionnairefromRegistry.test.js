@@ -51,7 +51,7 @@ describe.each(databases)("testing getQuestionnaireFromRegistry" ,(databaseName) 
         req = mockRequest();
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toBeCalledWith(expect.objectContaining({author_id:"678", sort_key:"0"}));
+        expect(res.json).toBeCalledWith(expect.objectContaining({"eq_id": "456", "test": "test123"}));
     });
 
     it(`should get a specific version from the registry using ${databaseName}`, async () => {
@@ -60,7 +60,7 @@ describe.each(databases)("testing getQuestionnaireFromRegistry" ,(databaseName) 
         req.body.version = "1";
         await getQuestionnaireFromRegistry(req, res, next); 
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toBeCalledWith(expect.objectContaining({author_id:"678", sort_key:"1"}));
+        expect(res.json).toBeCalledWith(expect.objectContaining({"eq_id": "456", "test": "test123"}));
     });
 
     it(`should return 500 and message when not record not found using ${databaseName}`, async () => {
