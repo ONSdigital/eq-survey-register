@@ -1,14 +1,14 @@
-const dynamoose = require("dynamoose");
-let throughput = "ON_DEMAND";
-let surveyRegistryTableName = "survey-registry";
+const dynamoose = require("dynamoose")
+let throughput = "ON_DEMAND"
+let surveyRegistryTableName = "survey-registry"
 
 if (process.env.DYNAMODB_ENDPOINT_OVERRIDE) {
-  dynamoose.local(process.env.DYNAMODB_ENDPOINT_OVERRIDE);
-  throughput = { read: 10, write: 10 }; // DynamoDB local doesn't yet support on-demand
+  dynamoose.local(process.env.DYNAMODB_ENDPOINT_OVERRIDE)
+  throughput = { read: 10, write: 10 } // DynamoDB local doesn't yet support on-demand
 }
 
 if (process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME) {
-  surveyRegistryTableName = process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME;
+  surveyRegistryTableName = process.env.DYNAMO_SURVEY_REGISTRY_TABLE_NAME
 }
 
 const surveyRegistrySchema = new dynamoose.Schema(
@@ -21,7 +21,7 @@ const surveyRegistrySchema = new dynamoose.Schema(
     sort_key: {
       type: String,
       required: true,
-      rangeKey: true,
+      rangeKey: true
     },
     author_id: {
       type: String,
@@ -64,78 +64,77 @@ const surveyRegistrySchema = new dynamoose.Schema(
     throughput: throughput,
     timestamps: true
   }
-);
+)
 
 const SurveyRegistryModel = dynamoose.model(
   surveyRegistryTableName,
   surveyRegistrySchema
-);
+)
 
 const getQuestionnaire = async (params) => {
-  let hash, sortKey, schema;
-  if(!params.id && (!params.survey_id || !params.form_type)){
-    throw "id or survey_id and form_type not provided in request";
+  let hash, schema
+  if (!params.id && (!params.survey_id || !params.form_type)) {
+    throw new Error("id or survey_id and form_type not provided in request")
   }
 
-  if(params.id){
-    hash = `${params.id}`;
+  if (params.id) {
+    hash = `${params.id}`
   }
-  else{
-    hash = `${params.survey_id}_${params.form_type}_${params.language || "en"}`;
+  else {
+    hash = `${params.survey_id}_${params.form_type}_${params.language || "en"}`
   }
-  sortKey = `${params.version || "0"}`
+  const sortKey = `${params.version || "0"}`
 
-  try{
-    schema = await SurveyRegistryModel.get({ id: hash, sort_key: sortKey });
-    if(schema){
-      return JSON.parse(JSON.stringify(schema));
+  try {
+    schema = await SurveyRegistryModel.get({ id: hash, sort_key: sortKey })
+    if (schema) {
+      return JSON.parse(JSON.stringify(schema))
     }
-    return;
+    return
   }
-  catch(e){
+  catch (e) {
     console.log(e)
-    throw ("error getting record")
+    throw new Error("error getting record")
   }
 }
 
 const saveQuestionnaire = async (data) => {
-  data.id = `${data.survey_id}_${data.form_type}_${data.language}`;
-  data.sort_key = `0`;
-  const currentModel = await SurveyRegistryModel.get({id: data.id, sort_key: data.sort_key});
-  try{
-    if(currentModel){
-      data.registry_version = (parseInt(currentModel.registry_version) + 1).toString();
+  data.id = `${data.survey_id}_${data.form_type}_${data.language}`
+  data.sort_key = `0`
+  const currentModel = await SurveyRegistryModel.get({ id: data.id, sort_key: data.sort_key })
+  try {
+    if (currentModel) {
+      data.registry_version = (parseInt(currentModel.registry_version) + 1).toString()
     }
     else {
-      data.registry_version = "1";
+      data.registry_version = "1"
     }
-    const modelLatest = new SurveyRegistryModel(data);
-    await modelLatest.save();
-    data.sort_key = `${data.registry_version}`;
-    const modelVersion = new SurveyRegistryModel(data);
-    await modelVersion.save();
+    const modelLatest = new SurveyRegistryModel(data)
+    await modelLatest.save()
+    data.sort_key = `${data.registry_version}`
+    const modelVersion = new SurveyRegistryModel(data)
+    await modelVersion.save()
   }
-  catch(e){
-    throw("error saving record")
+  catch (e) {
+    throw new Error("error saving record")
   }
-  return;
 }
 
-const getQuestionnaireSummary  = async ( latest ) => {
-  let data;
-  const attributes = ["id", "sort_key", "survey_id", "form_type", "registry_version", "title", "language"];
-  try{
-    if(latest){
-        data = await SurveyRegistryModel.scan('sort_key').eq("0").attributes(attributes).exec();
+const getQuestionnaireSummary = async (latest) => {
+  let data
+  const attributes = ["id", "sort_key", "survey_id", "form_type", "registry_version", "title", "language"]
+  try {
+    if (latest) {
+      data = await SurveyRegistryModel.scan('sort_key').eq("0").attributes(attributes).exec()
     }
-    else{
-        data = await SurveyRegistryModel.scan('sort_key').not().eq("0").attributes(attributes).exec();
+    else {
+      data = await SurveyRegistryModel.scan('sort_key').not().eq("0").attributes(attributes).exec()
     }
   }
-  catch(e){
-    throw("error getting summary")
+  catch (e) {
+    throw new Error("error getting summary")
   }
-  return JSON.parse(JSON.stringify(data));
+  return JSON.parse(JSON.stringify(data))
 }
 
-module.exports = {getQuestionnaire, saveQuestionnaire, getQuestionnaireSummary};
+module.exports = { getQuestionnaire, saveQuestionnaire, getQuestionnaireSummary }

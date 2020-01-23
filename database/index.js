@@ -1,3 +1,3 @@
-const database = require(process.env.DATABASE? './' + process.env.DATABASE : './dynamo');
+const database = require(process.env.DATABASE ? './' + process.env.DATABASE : './dynamo')
 
-module.exports = database;
+module.exports = database
