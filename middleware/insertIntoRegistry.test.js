@@ -18,7 +18,7 @@ const mockRequest = () => {
 }
 
 describe.each(databases)("testing InsertIntoRegistry" ,(databaseName) => {
-    let res, req, next = jest.fn(), insertIntoSurveyRegistry;
+    let res, req, next = jest.fn(), insertIntoRegistry;
 
     beforeAll (() => {
         jest.resetModules();

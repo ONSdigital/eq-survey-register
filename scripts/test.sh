@@ -8,7 +8,7 @@ FIRESTORE_PORT=8080
 SURVEY_REGISTER_URL=http://host.docker.internal:8080
 GO_QUICK_LAUNCHER_URL=http://localhost:8000/quick-launch?url=
 PUBLISHER_URL=http://host.docker.internal:9000/publish/
-FIRESTORE_PROJECT_ID=dummy-project-id
+FIRESTORE_PROJECT_ID=test-project
 
 echo "starting docker..."
 

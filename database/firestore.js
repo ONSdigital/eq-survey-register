@@ -1,6 +1,9 @@
 const {Firestore} = require('@google-cloud/firestore');
 
-const db = new Firestore();
+const db = new Firestore({
+  projectId: process.env.FIRESTORE_PROJECT_ID
+  //keyFilename: '../test_firestore_account.json'
+});
 
 const getQuestionnaire = async (params) => {
   let hash, sortKey, schema, response;
