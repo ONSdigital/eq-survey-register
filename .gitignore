@@ -73,3 +73,5 @@ typings/
 fragmentTypes.json
 
 data/
+
+test_firestore_account.json
