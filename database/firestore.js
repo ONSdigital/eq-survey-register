@@ -1,15 +1,9 @@
 const { Firestore } = require('@google-cloud/firestore')
 
-let db
-if (process.env.GOOGLE_AUTH_PROJECT_ID) {
-  db = new Firestore({
-    projectId: process.env.GOOGLE_AUTH_PROJECT_ID
-    // keyFilename: '../test_firestore_account.json'
-  })
-}
-else {
-  db = new Firestore()
-}
+const db = new Firestore({
+  projectId: process.env.GOOGLE_AUTH_PROJECT_ID
+  // keyFilename: '../test_firestore_account.json'
+})
 
 const getQuestionnaire = async (params) => {
   let hash, schema, response
