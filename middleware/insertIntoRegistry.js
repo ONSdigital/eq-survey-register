@@ -16,7 +16,7 @@ const insertIntoSurveyResister = (req, res, next) => {
     questionnaire.theme = themeLookup[key]
     questionnaire.form_type = formTypes[key]
     const model = {
-      author_id: questionnaire.eq_id,
+      author_id: questionnaire.eq_id || questionnaire.id,
       survey_id: surveyId,
       form_type: formTypes[key],
       date_published: Date.now(),
