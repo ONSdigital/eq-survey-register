@@ -18,7 +18,7 @@ const getQuestionnaireFromRegistry = async (req, res, next) => {
         res.status(500).json({ message: "No record found"});
       }
       else{
-        res.status(200).json(data);
+        res.status(200).json(data.schema);
       }
       next();
     }
