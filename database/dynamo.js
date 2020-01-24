@@ -72,7 +72,7 @@ const SurveyRegistryModel = dynamoose.model(
 )
 
 const getQuestionnaire = async (params) => {
-  let hash, schema
+  let hash, data
   if (!params.id && (!params.survey_id || !params.form_type)) {
     throw new Error("id or survey_id and form_type not provided in request")
   }
@@ -86,9 +86,9 @@ const getQuestionnaire = async (params) => {
   const sortKey = `${params.version || "0"}`
 
   try {
-    schema = await SurveyRegistryModel.get({ id: hash, sort_key: sortKey })
-    if (schema) {
-      return JSON.parse(JSON.stringify(schema))
+    data = await SurveyRegistryModel.get({ id: hash, sort_key: sortKey })
+    if (data) {
+      return JSON.parse(data.schema)
     }
     return
   }

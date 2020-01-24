@@ -27,7 +27,7 @@ const mockModel = () => {
     form_type: "456",
     date_published: Date.now(),
     survey_version: "1",
-    schema: { eq_id: "456", test: "test123" },
+    schema: JSON.stringify({ eq_id: "456", test: "test123" }),
     title: "A test",
     language: "en",
     runner_version: "v2"

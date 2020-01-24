@@ -1,12 +1,18 @@
 const { Firestore } = require('@google-cloud/firestore')
 
-const db = new Firestore({
-  projectId: process.env.FIRESTORE_PROJECT_ID
-  // keyFilename: '../test_firestore_account.json'
-})
+let db
+if (process.env.GOOGLE_AUTH_PROJECT_ID) {
+  db = new Firestore({
+    projectId: process.env.FIRESTORE_PROJECT_ID
+    // keyFilename: '../test_firestore_account.json'
+  })
+}
+else {
+  db = new Firestore()
+}
 
 const getQuestionnaire = async (params) => {
-  let hash, schema, response
+  let hash, doc
 
   if (!params.id && (!params.survey_id || !params.form_type)) {
     throw new Error("id or survey_id and form_type not provided in request")
@@ -22,12 +28,12 @@ const getQuestionnaire = async (params) => {
 
   try {
     const docRef = await db.collection('schemas').doc(hash).collection('versions').doc(sortKey)
-    schema = await docRef.get()
-    if (!schema.exists) {
+    doc = await docRef.get()
+    if (!doc.exists) {
       return
     }
-    response = await schema.data()
-    return response
+    const data = await doc.data()
+    return JSON.parse(data.schema)
   }
   catch (e) {
     console.log(e)

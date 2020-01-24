@@ -16,12 +16,12 @@ const insertIntoSurveyResister = (req, res, next) => {
     questionnaire.theme = themeLookup[key]
     questionnaire.form_type = formTypes[key]
     const model = {
-      author_id: questionnaire.eq_id || questionnaire.id,
+      author_id: questionnaire.eq_id,
       survey_id: surveyId,
       form_type: formTypes[key],
       date_published: Date.now(),
       survey_version: surveyVersion,
-      schema: questionnaire,
+      schema: JSON.stringify(questionnaire),
       title: questionnaire.title,
       language: language,
       runner_version: runner_version

@@ -13,12 +13,12 @@ module.exports = async (req, res, next) => {
   schema.theme = themeLookup[theme]
   schema.form_type = form_type
   const model = {
-    author_id: schema.eq_id || schema.id,
+    author_id: schema.eq_id,
     survey_id: survey_id,
     form_type: form_type,
     date_published: Date.now(),
     survey_version: survey_version,
-    schema: schema,
+    schema: JSON.stringify(schema),
     title: schema.title,
     language: language,
     runner_version: runner_version
