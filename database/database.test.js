@@ -1,4 +1,4 @@
-const databases = ["dynamo", "firestore"]
+const databases = ["dynamo", "firestore", ""]
 
 const mockModel = () => {
   return {
@@ -12,6 +12,7 @@ const mockModel = () => {
     runner_version: "v1"
   }
 }
+
 const mockRequest = () => {
   return {
     survey_id: "123",
@@ -51,6 +52,18 @@ describe.each(databases)("testing database modules", (databaseName) => {
     data = await database.getQuestionnaire(req)
     expect(data).toMatchObject({ eq_id: "123", title: "test" })
     expect(data).toMatchObject({ version: "1" })
+  })
+
+  it(`should retrieve a specific version using id using ${databaseName}`, async () => {
+    req = { id: "123_456_en" }
+    data = await database.getQuestionnaire(req)
+    expect(data).toMatchObject({ eq_id: "123", title: "test" })
+    expect(data).toMatchObject({ version: "2" })
+  })
+
+  it(`should throw an error getting record when missing key fields ${databaseName}`, async () => {
+    const badReq = {}
+    expect(database.getQuestionnaire(badReq)).rejects.toEqual(new Error("id or survey_id and form_type not provided in request"))
   })
 
   it(`should retieve a list of latest schema version using ${databaseName}`, async () => {
