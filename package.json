@@ -46,8 +46,8 @@
       "!tests/**/*",
       "!**/tests/**/*",
       "!scripts/*",
-      "!middleware/import.js",
-      "!app.js"
+      "!middleware/index.js",
+      "!index.js"
     ],
     "watchPathIgnorePatterns": [
       "data/"

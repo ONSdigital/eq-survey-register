@@ -1,6 +1,7 @@
 const mockSchema = require("./mocks/mockSchema")
-const getQuestionnaireFromPublisher = require("./getQuestionnaireFromPublisher")
+jest.mock('request')
 const request = require("request-promise-native")
+const getQuestionnaireFromPublisher = require("./getQuestionnaireFromPublisher")
 
 const mockResponse = () => {
   const res = { questionnaire: {} }
@@ -21,8 +22,6 @@ const mockRequest = () => {
   }
   return req
 }
-
-jest.mock('request')
 
 describe("testing getQuestionnaireFromPublisher", () => {
   let res, req

@@ -93,7 +93,6 @@ const getQuestionnaire = async (params) => {
     return
   }
   catch (e) {
-    console.log(e)
     throw new Error("error getting record")
   }
 }

@@ -36,7 +36,6 @@ const getQuestionnaire = async (params) => {
     return JSON.parse(data.schema)
   }
   catch (e) {
-    console.log(e)
     throw new Error("error getting record")
   }
 }
@@ -60,7 +59,6 @@ const saveQuestionnaire = async (data) => {
     await docRef.set(data)
   }
   catch (e) {
-    console.log(e)
     throw new Error("error saving record")
   }
 }
