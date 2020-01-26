@@ -8,32 +8,31 @@ const themeLookup = {
   "UKIS ONS": "ukis"
 }
 
-const insertIntoSurveyResister = (req, res, next) => {
+const insertIntoSurveyResister = async (req, res, next) => {
   const { surveyId, formTypes, surveyVersion, runner_version = "v2", language = "en" } = req.body
   let error = false
-  Object.keys(formTypes).forEach(async (key) => {
-    const questionnaire = res.questionnaire
-    questionnaire.theme = themeLookup[key]
-    questionnaire.form_type = formTypes[key]
-    const model = {
-      author_id: questionnaire.eq_id,
-      survey_id: surveyId,
-      form_type: formTypes[key],
-      date_published: Date.now(),
-      survey_version: surveyVersion,
-      schema: JSON.stringify(questionnaire),
-      title: questionnaire.title,
-      language: language,
-      runner_version: runner_version
-    }
-    try {
+  try {
+    Object.keys(formTypes).forEach(async (key) => {
+      const questionnaire = res.questionnaire
+      questionnaire.theme = themeLookup[key]
+      questionnaire.form_type = formTypes[key]
+      const model = {
+        author_id: questionnaire.eq_id,
+        survey_id: surveyId,
+        form_type: formTypes[key],
+        date_published: Date.now(),
+        survey_version: surveyVersion,
+        schema: JSON.stringify(questionnaire),
+        title: questionnaire.title,
+        language: language,
+        runner_version: runner_version
+      }
       await database.saveQuestionnaire(model)
-    }
-    catch (e) {
-      console.log(e)
-      error = true
-    }
-  })
+    })
+  }
+  catch (e) {
+    error = true
+  }
 
   if (error) {
     res.status(500).json({
