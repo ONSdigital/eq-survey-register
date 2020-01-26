@@ -10,7 +10,8 @@
     "start_service": "node index.js",
     "dynamodb-admin": "AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy DYNAMO_ENDPOINT=http://localhost:8090 dynamodb-admin",
     "lint": "eslint .",
-    "test": "./scripts/test.sh"
+    "test": "./scripts/test.sh",
+    "test-ci": "scripts/test.sh"
   },
   "dependencies": {
     "@google-cloud/firestore": "^3.4.0",
@@ -26,7 +27,6 @@
   "devDependencies": {
     "dynamodb-admin": "^3.2.0",
     "eslint": "^6.8.0",
-    "eslint-config-eq-author": "latest",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-jasmine": "^4.1.0",

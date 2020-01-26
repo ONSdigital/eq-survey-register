@@ -1,0 +1,15 @@
+version: "3"
+services:
+  firestore:
+    image: mtlynch/firestore-emulator-docker
+    environment:
+      - FIRESTORE_PROJECT_ID=test-project
+      - PORT=8080
+    ports:
+      - 8080:8080
+
+  dynamo:
+    image: amazon/dynamodb-local
+    ports:
+      - 8000:8000
+

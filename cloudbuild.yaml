@@ -1,0 +1,39 @@
+# [START cloudbuild]
+steps:
+# This step starts the backing services
+  - name: 'docker/compose'
+    id: 'databases'
+    args: ['-f', 'docker-compose-ci.yml', 'up', '-d']
+
+# This step runs the unit tests on the app
+  - name: 'node:10.18.1-alpine'
+    id: Test
+    entrypoint: /bin/sh
+    args:
+    - -c
+    - |
+      yarn install && \
+      apk add --no-cache --upgrade bash && \
+      ./scripts/test-ci.sh
+    waitFor: [databases]
+
+# This step stops the backing services
+  - name: 'docker/compose'
+    args: ['-f', 'docker-compose-ci.yml', 'down']
+
+# This step builds the container image.
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Build
+    args:
+    - 'build'
+    - '-t'
+    - 'gcr.io/$PROJECT_ID/eq-survey-register:$SHORT_SHA'
+    - '.'
+
+# This step pushes the image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Push
+    args:
+    - 'push'
+    - 'gcr.io/$PROJECT_ID/eq-survey-register:$SHORT_SHA'
+# [END cloudbuild]
