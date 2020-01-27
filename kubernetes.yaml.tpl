@@ -39,7 +39,7 @@ spec:
               secretKeyRef:
                 name: registry-secrets
                 key: REGISTRY_DATABASE_SOURCE
-          - name: SPUBLISHER_URL
+          - name: PUBLISHER_URL
             valueFrom:
               secretKeyRef:
                 name: registry-secrets
