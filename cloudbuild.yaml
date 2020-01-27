@@ -67,9 +67,9 @@ steps:
     - '-c'
     - |
       set -x && \
-      cd eq-survey-register-test-env && \
+      cd eq-survey-register-env && \
       git add kubernetes.yaml && \
-      git commit -m "Deploying image eu.gcr.io/${PROJECT_ID}/eq-survey-register-test-env:${SHORT_SHA}
+      git commit -m "Deploying image eu.gcr.io/${PROJECT_ID}/eq-survey-register-env:${SHORT_SHA}
       Built from commit ${COMMIT_SHA} of repository hello-cloudbuild-app
       Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
       git push origin ${_ENV}-candidate
