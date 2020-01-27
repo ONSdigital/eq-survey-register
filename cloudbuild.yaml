@@ -46,7 +46,7 @@ steps:
     - |
       gcloud source repos clone eq-survey-register-env && \
       cd eq-survey-register-env && \
-      git checkout ${env}-candidate && \
+      git checkout ${_ENV}-candidate && \
       git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
 
 # This step generates the new manifest
@@ -72,5 +72,5 @@ steps:
       git commit -m "Deploying image eu.gcr.io/${PROJECT_ID}/eq-survey-register-test-env:${SHORT_SHA}
       Built from commit ${COMMIT_SHA} of repository hello-cloudbuild-app
       Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
-      git push origin ${env}-candidate
+      git push origin ${_ENV}-candidate
 # [END cloudbuild]
