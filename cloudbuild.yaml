@@ -69,8 +69,8 @@ steps:
       set -x && \
       cd eq-survey-register-test-env && \
       git add kubernetes.yaml && \
-      git commit -m "Deploying image eu.gcr.io/${PROJECT_ID}/hello-cloudbuild:${SHORT_SHA}
+      git commit -m "Deploying image eu.gcr.io/${PROJECT_ID}/eq-survey-register-test-env:${SHORT_SHA}
       Built from commit ${COMMIT_SHA} of repository hello-cloudbuild-app
       Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
-      git push origin candidate
+      git push origin staging-candidate
 # [END cloudbuild]
