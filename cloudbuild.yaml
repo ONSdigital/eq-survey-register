@@ -27,7 +27,7 @@ steps:
     args:
     - 'build'
     - '-t'
-    - 'eu.gcr.io/$PROJECT_ID/eq-survey-register:$SHORT_SHA'
+    - 'eu.gcr.io/$PROJECT_ID/eq-survey-registry:$SHORT_SHA'
     - '.'
 
 # This step pushes the image to Container Registry
@@ -35,7 +35,7 @@ steps:
     id: Push
     args:
     - 'push'
-    - 'eu.gcr.io/$PROJECT_ID/eq-survey-register:$SHORT_SHA'
+    - 'eu.gcr.io/$PROJECT_ID/eq-survey-registry:$SHORT_SHA'
 
 # This step clones the hello-cloudbuild-env repository
   - name: 'gcr.io/cloud-builders/gcloud'
