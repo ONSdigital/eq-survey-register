@@ -44,9 +44,9 @@ steps:
     args:
     - '-c'
     - |
-      gcloud source repos clone eq-survey-register-test-env && \
-      cd eq-survey-register-test-env && \
-      git checkout staging-candidate && \
+      gcloud source repos clone eq-survey-register-env && \
+      cd eq-survey-register-env && \
+      git checkout ${env}-candidate && \
       git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
 
 # This step generates the new manifest
@@ -57,7 +57,7 @@ steps:
     - '-c'
     - |
       sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" kubernetes.yaml.tpl | \
-      sed "s/COMMIT_SHA/${SHORT_SHA}/g" > eq-survey-register-test-env/kubernetes.yaml
+      sed "s/COMMIT_SHA/${SHORT_SHA}/g" > eq-survey-register-env/kubernetes.yaml
 
 # This step pushes the manifest back to hello-cloudbuild-env
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -72,5 +72,5 @@ steps:
       git commit -m "Deploying image eu.gcr.io/${PROJECT_ID}/eq-survey-register-test-env:${SHORT_SHA}
       Built from commit ${COMMIT_SHA} of repository hello-cloudbuild-app
       Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
-      git push origin staging-candidate
+      git push origin ${env}-candidate
 # [END cloudbuild]
