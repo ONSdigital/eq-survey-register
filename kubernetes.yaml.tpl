@@ -15,32 +15,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-cloudbuild
+  name: eq-survey-registry
   labels:
-    app: hello-cloudbuild
+    app: eq-survey-registry
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello-cloudbuild
+      app: eq-survey-registry
   template:
     metadata:
       labels:
-        app: hello-cloudbuild
+        app: eq-survey-registry
     spec:
       containers:
-      - name: hello-cloudbuild
-        image: gcr.io/GOOGLE_CLOUD_PROJECT/hello-cloudbuild:COMMIT_SHA
+      - name: eq-survey-registry
+        image: gcr.io/GOOGLE_CLOUD_PROJECT/eq-survey-registry:COMMIT_SHA
         ports:
         - containerPort: 8080
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: hello-cloudbuild
+  name: eq-survey-registry
 spec:
   selector:
-    app: hello-cloudbuild
+    app: eq-survey-registry
   ports:
   - protocol: TCP
     port: 80
