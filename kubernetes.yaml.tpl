@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: eq-survey-registry
-        image: gcr.io/GOOGLE_CLOUD_PROJECT/eq-survey-registry:COMMIT_SHA
+        image: eu.gcr.io/GOOGLE_CLOUD_PROJECT/eq-survey-registry:COMMIT_SHA
         ports:
         - containerPort: 8080
 ---
