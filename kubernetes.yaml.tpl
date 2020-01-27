@@ -33,6 +33,17 @@ spec:
         image: eu.gcr.io/GOOGLE_CLOUD_PROJECT/eq-survey-registry:COMMIT_SHA
         ports:
         - containerPort: 8080
+        env:
+          - name: REGISTRY_DATABASE_SOURCE
+            valueFrom:
+              secretKeyRef:
+                name: registry-secrets
+                key: REGISTRY_DATABASE_SOURCE
+          - name: SPUBLISHER_URL
+            valueFrom:
+              secretKeyRef:
+                name: registry-secrets
+                key: PUBLISHER_URL
 ---
 kind: Service
 apiVersion: v1
