@@ -11,7 +11,7 @@ const getQuestionnaireFromPublisher = async (req, res, next) => {
   await request(options)
     .then(response => (res.questionnaire = response))
     .catch(e => {
-      res.status(500).send({
+      res.status(500).json({
         message: "Sorry, something went wrong with the Publisher request"
       })
       next(e)

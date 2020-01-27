@@ -34,4 +34,14 @@ describe("testing getQuestionnaireFromPublisher", () => {
     await getQuestionnaireFromPublisher(req, res, next)
     expect(res.questionnaire).toMatchObject(mockSchema())
   })
+
+  it(`should handle a thrown error`, async () => {
+    res = mockResponse()
+    req = mockRequest()
+    request.mockImplementation(async () => {
+      throw new Error("test error")
+    })
+    await getQuestionnaireFromPublisher(req, res, next)
+    expect(res.status).toHaveBeenCalledWith(500)
+  })
 })
