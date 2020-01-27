@@ -32,7 +32,7 @@ describe.each(databases)("testing InsertIntoRegistry", (databaseName) => {
 
   beforeAll(() => {
     jest.resetModules()
-    process.env.DATABASE = databaseName
+    process.env.REGISTRY_DATABASE_SOURCE = databaseName
     insertIntoRegistry = require("./insertIntoRegistry")
   })
 

@@ -41,7 +41,7 @@ describe.each(databases)("testing getQuestionnaireSummary", (databaseName) => {
 
   beforeAll(async () => {
     jest.resetModules()
-    process.env.DATABASE = databaseName
+    process.env.REGISTRY_DATABASE_SOURCE = databaseName
     getQuestionnaireSummary = require("./getQuestionnaireSummary")
     database = require("../database")
     const mock = mockModel()

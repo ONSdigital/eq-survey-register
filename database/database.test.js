@@ -26,7 +26,7 @@ describe.each(databases)("testing database modules", (databaseName) => {
 
   beforeAll(async () => {
     jest.resetModules()
-    process.env.DATABASE = databaseName
+    process.env.REGISTRY_DATABASE_SOURCE = databaseName
     database = require(".")
     model = mockModel()
     req = mockRequest()

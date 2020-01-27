@@ -37,7 +37,7 @@ describe.each(databases)("testing InsertSchemaIntoRegistry", (databaseName) => {
 
   beforeAll(() => {
     jest.resetModules()
-    process.env.DATABASE = databaseName
+    process.env.REGISTRY_DATABASE_SOURCE = databaseName
     insertSchemaIntoRegistry = require("./insertSchemaIntoRegistry")
   })
 

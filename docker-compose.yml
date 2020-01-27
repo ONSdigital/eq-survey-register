@@ -31,7 +31,7 @@ services:
       - FIRESTORE_EMULATOR_HOST=host.docker.internal:8200
       - FIRESTORE_PROJECT_ID=test-project
       - GOOGLE_AUTH_PROJECT_ID=test-project
-      - DATABASE=firestore
+      - REGISTRY_DATABASE_SOURCE=firestore
     entrypoint:
       - yarn
       - start
