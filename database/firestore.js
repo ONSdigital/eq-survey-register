@@ -59,7 +59,6 @@ const saveQuestionnaire = async (data) => {
     await docRef.set(data)
   }
   catch (e) {
-    console.log(e)
     throw new Error("error saving record")
   }
 }
