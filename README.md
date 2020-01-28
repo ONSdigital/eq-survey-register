@@ -1,5 +1,5 @@
 ## eq-survey-register
-
+test
 This service acts as a register of surveys published from the eq-author service.
 
 ### Build and Run
