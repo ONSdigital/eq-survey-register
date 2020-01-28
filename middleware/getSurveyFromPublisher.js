@@ -11,6 +11,7 @@ module.exports = async (req, res, next) => {
   await request(options)
     .then(response => (res.questionnaire = response))
     .catch(e => {
+      console.error(e);
       res.status(500).send({
         message: "Sorry, something went wrong with the Publisher request"
       });

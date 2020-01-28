@@ -98,20 +98,29 @@ module.exports = async (req, res, next, model = QuestionnaireModel) => {
             `Latest version of ${res.questionnaire.eq_id} has been updated`
           );
         })
-        .catch(e => res.status(500).json());
+        .catch(e => {
+          console.error(e);
+          return res.status(500).json();
+        });
     } else {
       saveModel(new model(latestQuestionnaireValues))
         .then(() => {
           console.log(`Latest version of ${eq_id} has been saved`);
         })
-        .catch(e => res.status(500).json());
+        .catch(e => {
+          console.error(e);
+          return res.status(500).json();
+        });
     }
 
     saveModel(new model(newQuestionnaireVersionValues))
       .then(() => {
         console.log(`Version ${surveyVersion} of ${eq_id} has been saved`);
       })
-      .catch(e => res.status(500).json());
+      .catch(e => {
+        console.error(e);
+        return res.status(500).json();
+      });
   });
 
   await Promise.all(pSurveys);
