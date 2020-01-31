@@ -1,14 +1,6 @@
 const uuid = require("uuid");
 const { QuestionnaireModel } = require("../database");
 
-const themeLookup = {
-  "Northern Ireland": "northernireland",
-  ONS: "default",
-  Social: "social",
-  "UKIS Northern Ireland": "ukis_ni",
-  "UKIS ONS": "ukis"
-};
-
 const saveModel = (model, options = {}) =>
   new Promise((resolve, reject) => {
     model.save(options, err => {
@@ -39,99 +31,140 @@ const getModel = (model, options = {}) =>
     });
   });
 
+const publishQuestionnaire = async (
+  form_type,
+  theme,
+  language,
+  survey_id,
+  surveyVersion,
+  questionnaire,
+  questionnaireId,
+  model
+) => {
+  const updatedQuestionnaire = {
+    ...questionnaire,
+    form_type,
+    theme,
+    language
+  };
+
+  const { eq_id, data_version, title } = questionnaire;
+
+  const latestQuestionnaireSortKey = `v0_${survey_id}_${form_type}_${language}`;
+  const newQuestionnaireVersionSortKey = `v${surveyVersion}_${survey_id}_${form_type}_${language}`;
+
+  const globalRegistryValues = {
+    author_id: questionnaireId,
+    eq_id,
+    survey_id,
+    form_type,
+    survey_version: surveyVersion,
+    runner_version: data_version,
+    language,
+    title,
+    schema: updatedQuestionnaire
+  };
+
+  const latestRegistryVersionValues = {
+    registry_id: uuid.v4(),
+    sort_key: latestQuestionnaireSortKey,
+    ...globalRegistryValues
+  };
+
+  const newRegistryVersionValues = {
+    registry_id: uuid.v4(),
+    sort_key: newQuestionnaireVersionSortKey,
+    ...globalRegistryValues
+  };
+
+  const latestQuestionnaire = await getModel(model, {
+    sort_key: latestQuestionnaireSortKey
+  });
+
+  const errors = [];
+
+  if (latestQuestionnaire) {
+    await updateModel(
+      model,
+      {
+        registry_id: latestQuestionnaire.registry_id
+      },
+      latestRegistryVersionValues
+    )
+      .then(() => {
+        console.log(`Latest version of ${eq_id} has been updated`);
+      })
+      .catch(e => {
+        errors.push(e);
+      });
+  } else {
+    await saveModel(new model(latestRegistryVersionValues))
+      .then(() => {
+        console.log(`Latest version of ${eq_id} has been saved`);
+      })
+      .catch(e => {
+        errors.push(e);
+      });
+  }
+
+  await saveModel(new model(newRegistryVersionValues))
+    .then(() => {
+      console.log(`Version ${surveyVersion} of ${eq_id} has been saved`);
+    })
+    .catch(e => {
+      errors.push(e);
+    });
+
+  if (errors.length) {
+    return { code: 500, errors };
+  }
+
+  return { code: 200, errors: null };
+};
+
 module.exports = async (req, res, next, model = QuestionnaireModel) => {
   if (!req.body || !res.questionnaire) {
     return res.status(400).json();
   }
 
-  const questionnaire = Object.assign({}, res.questionnaire);
-  const { eq_id, survey_id, data_version, title } = questionnaire;
-  const { formTypes, surveyVersion, questionnaireId } = req.body;
+  const { surveyVersion, publishDetails, questionnaireId } = req.body;
 
-  const pSurveys = Object.keys(formTypes).map(async key => {
-    questionnaire.theme = themeLookup[key];
-    questionnaire.form_type = formTypes[key];
+  let status;
 
-    const { form_type } = questionnaire;
+  let launchURLs = [];
 
-    const latestQuestionnaireSortKey = `v0_${survey_id}_${form_type}_en`;
-    const newQuestionnaireVersionSortKey = `v${surveyVersion}_${survey_id}_${form_type}_en`;
+  loop1: for (const publishDetail of publishDetails) {
+    const { surveyId, formType, variants } = publishDetail;
 
-    const globalQuestionnaireValues = {
-      author_id: questionnaireId,
-      eq_id,
-      survey_id,
-      form_type,
-      survey_version: surveyVersion,
-      runner_version: data_version,
-      language: "en",
-      title,
-      schema: questionnaire
-    };
+    for (const variant of variants) {
+      const { language, theme } = variant;
 
-    const latestQuestionnaireValues = {
-      registry_id: uuid.v4(),
-      sort_key: latestQuestionnaireSortKey,
-      ...globalQuestionnaireValues
-    };
+      status = await publishQuestionnaire(
+        formType,
+        theme,
+        language,
+        surveyId,
+        surveyVersion,
+        res.questionnaire,
+        questionnaireId,
+        model
+      );
 
-    const newQuestionnaireVersionValues = {
-      registry_id: uuid.v4(),
-      sort_key: newQuestionnaireVersionSortKey,
-      ...globalQuestionnaireValues
-    };
+      if (status.code != 200) {
+        break loop1;
+      }
 
-    const latestQuestionnaire = await getModel(model, {
-      sort_key: latestQuestionnaireSortKey
-    });
-
-    if (latestQuestionnaire) {
-      updateModel(
-        model,
-        {
-          registry_id: latestQuestionnaire.registry_id
-        },
-        latestQuestionnaireValues
-      )
-        .then(() => {
-          console.log(
-            `Latest version of ${res.questionnaire.eq_id} has been updated`
-          );
-        })
-        .catch(e => {
-          console.error(e);
-          return res.status(500).json();
-        });
-    } else {
-      saveModel(new model(latestQuestionnaireValues))
-        .then(() => {
-          console.log(`Latest version of ${eq_id} has been saved`);
-        })
-        .catch(e => {
-          console.error(e);
-          return res.status(500).json();
-        });
-    }
-
-    saveModel(new model(newQuestionnaireVersionValues))
-      .then(() => {
-        console.log(`Version ${surveyVersion} of ${eq_id} has been saved`);
-      })
-      .catch(e => {
-        console.error(e);
-        return res.status(500).json();
+      launchURLs.push({
+        surveyId,
+        formType,
+        url: `${process.env.SURVEY_REGISTER_URL}/questionnaires/version?survey_id=${surveyId}&form_type=${formType}&survey_version=${surveyVersion}`
       });
-  });
+    }
+  }
 
-  await Promise.all(pSurveys);
+  if (status.code != 200) {
+    return res.status(500).json();
+  }
 
-  const launchUrls = Object.keys(formTypes).map(form_type => {
-    return {
-      survey_id,
-      form_type,
-      url: `${process.env.SURVEY_REGISTER_URL}/questionnaires/version?survey_id=${survey_id}&form_type=${form_type}&survey_version=${surveyVersion}`
-    };
-  });
-
-  return res.status(200).json(launchUrls);
+  return res.status(200).json(launchURLs);
 };

@@ -10,7 +10,7 @@
     "start": "nodemon",
     "start_service": "node index.js",
     "dynamodb-admin": "AWS_REGION=eu-west-1 AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy DYNAMO_ENDPOINT=http://localhost:8090 dynamodb-admin",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "AWS_REGION=eu-west-1 jest --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "dynamoose": "^1.10.0",
