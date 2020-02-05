@@ -66,25 +66,4 @@ describe("Inserting a questionnaire into the registry", () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
   });
-
-  it("should return status 200 if it creates a new entry successfully", async () => {
-    const req = mockRequest({
-      formTypes: [{ ONS: "def" }],
-      questionnaireId: "789-123-456",
-      surveyVersion: "1"
-    });
-    const res = mockResponse({
-      questionnaire: {
-        eq_id: "789-123-456",
-        survey_id: "abc",
-        form_type: "def",
-        data_version: "0.0.1",
-        title: "ABC; it's easy as 1, 2, 3..."
-      }
-    });
-
-    await postQuestionnaire(req, res, null, Model);
-
-    expect(res.status).toHaveBeenCalledWith(200);
-  });
 });
